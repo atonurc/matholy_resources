@@ -1,0 +1,293 @@
+\documentclass[11pt]{scrartcl}
+\usepackage{atonu}
+\usepackage{fullpage}
+\usepackage{amsmath,amsthm, amsfonts}
+
+
+\begin{document}
+\title{Order, Primitive Roots and Quadratic Residue}
+\subtitle{BdMO National Camp 2021}
+\author{\scshape{Atonu Roy Chowdhury} \\
+\mailto{atonuroychowdhury@gmail.com}}
+\date{\today}
+\maketitle
+
+\section{Order!}
+Let's recall two of the theorems that we've seen before.
+\begin{theorem}[Fermat's Little Theorem and Euler's Theoem]
+Let \(p\) be a prime number and \(a\) be an integer coprime with \(p\). Then
+\[a^{p-1}\equiv 1 \amod{p}\]
+More generally, if \(m\) and \(a\) are positive integers with \(\gcd(a,m) =1\), then
+\[a^{\varphi(m)} \equiv 1 \amod{m}\]
+\end{theorem}
+That is, if you take the sequence \(a^1, a^2, a^3, \ldots\) in \(\text{mod }m\), then the sequence eventually reaches \(1\) at \(a^{\varphi(m)}\), and thus it becomes periodic. But, does the sequence reach \(1\) before \(\varphi(m)\)?\\
+The answer is yes. You can easily find examples. One simple example is: taking \(a=2\) and \(m=7\). Then \(\varphi(m)=\varphi(7)=6\), but \(2^3 \equiv 1 \amod{7}\). So \(6\) is not the smallest \(n\) such that \(2^n \equiv 1 \amod{7}\). We shall call this smallest such \(n\) ``order''. 
+\begin{defn}[Order modulo \(m\)]
+Let \(a\) and \(m\) be coprime positive integers. Then the order of \(a\) modulo \(m\), denoted by \(\ord_m(a)\) is defined as follows:
+\[\ord_m(a) := \min \left\{n\in\NN : a^n \equiv 1 \amod{m}\right\}\]
+That means, if \(\ord_m(a) = d\), then \(a^d \equiv 1 \amod{m}\) and for every positive integer \(k\) smaller than \(d\), we have \(a^k \not\equiv 1 \amod{m}\).
+\end{defn}
+Now a natural question arises: is there some formula using which we can calculate order? Sadly, the answer is no. But hey, don't get frustrated. You don't really have to check every integer from \(1\) to \(\varphi(m)\). To reduce your hardwork, there comes our next theorem. Evan Chen named it ``Fundamental Theorem of Orders'', so I'm keeping the name.
+\begin{theorem}[Fundamental Theorem of Orders]
+\(a^N \equiv 1 \amod{m}\) if and only if \(\ord_m(a) \mid N\). 
+\end{theorem}
+\begin{proof}
+Let \(\ord_m(a)=d\). The if direction is trivial. If 
+\[d \mid N \implies N = dq \implies a^N \equiv a^{dq} \equiv \left(a^d\right)^q \equiv 1^q \equiv 1 \amod{m} \]
+For the other direction, we just need to use the division algorithm to arrive at contradiction. Assume for the sake of contradiction that \(d \nmid N\). That means, \(N\) leaves some non-zero remainder upon division by \(d\). So \(N = dq+r\), where \(0<r<d\). Now, 
+\[1 \equiv a^N \equiv a^{dq+r} \equiv \left(a^d\right)^q a^r \equiv 1^q a^r\equiv a^r \amod{m} \implies \boxed{a^r \equiv 1 \amod{m}} \]
+By definition of order, for every positive integer \(k\) smaller than \(d\), we have \(a^k \not\equiv 1 \amod{m}\). Here, \(r\) is a positive integer smaller than \(d\), but \(a^r \equiv 1 \amod{m}\). Thus we arrive at a contradiction. Hence \(d\) must divide \(N\).
+\end{proof}
+This theorem immediately gives us a corollary.
+\begin{corollary}
+If \(\gcd(a,m) = 1\), then \(\ord_m(a) \mid \varphi(m)\)
+\end{corollary}
+Now we shall see an application of the \textit{Fundamental Theorem of Orders}.
+\begin{lemma}
+Let \(d= \ord_m(a)\). Then \(a^x \equiv a^y \amod{m}\) if and only if \(x \equiv y \amod{d}\).
+\end{lemma}
+\begin{proof}
+WLOG, we can assume that \(x \geq y\). Order is defined only when \(\gcd(a,m)=1\). Therefore, we can actually divide both sides of the modular equation by \(a^y\).
+\[a^x \equiv a^y \amod{m} \iff a^{x-y} \equiv 1 \amod{m} \iff d \mid x-y \iff x \equiv y \amod{d}\]
+Thus, we are done.
+\end{proof}
+Alright, time for a fun exercise.
+\begin{exercise}
+Let \(a\) and \(n\) be coprime integers. Show that \(n \mid \varphi(a^n - 1)\)
+\end{exercise}
+\begin{soln}
+Let \(N = a^n - 1\). Obviously \(\gcd(a,N) = \gcd(a, a^n - 1) = 1\). Then by \textit{Corollary 1.3}, 
+\[\ord_N(a) \mid \varphi(N)\]
+If we can show that \(\ord_N(a) = n\), then we are basically done. It's actually not hard at all to show. Obviously, \(a^n \equiv 1 \amod N\). Now,
+\[0<k<n \implies a^k - 1 < a^n - 1 \implies N \nmid a^k -1 \implies a^k \not\equiv 1 \amod N\]
+Therefore, \(\ord_N(a) = n\) and we are done.
+\end{soln}
+\pagebreak
+
+\section{Primitive Roots}
+We've seen a few example in the Orders section that \(\phi(m)\) may not be the smallest positive integer to raise power such that it becomes \(1\) modulo \(m\). But occasionally it is the smallest such positive integer. That's when things start getting interesting.
+\begin{defn}[Primitive Root]
+An integer \(g\) is said to be a primitive root modulo \(n\) if \(\gcd(g,n) = 1\) and \[\ord_n(g) = \varphi(n)\]
+\end{defn}
+Notice that primitive roots might not always exist. Also, even if they do, they need not be unique. So, what's interesting about primitive roots? Well, they exist when we need them the most.
+\begin{theorem}
+Let \(p\) be a prime number. Then there exists a primitive root modulo \(p\).
+\end{theorem}
+This theorem has a stronger generalization. We don't need it now.
+\begin{proof}
+Before jumping into the proof, we need a lemma. I'll leave the proof of the lemma as an exercise for the reader.
+\begin{lemma}
+For every positive integer \(n\),
+\[\sum_{d \mid n} \varphi(d) = n\]
+That is, a number is exactly equal to the sum of its divisor's \(\varphi\).
+\end{lemma}
+We know that \(a^{p-1} \equiv 1 \amod p\), and hence \(\ord_p(a)\) is a divisor of \(p-1\) for every \(a\) with \(1\leq a \leq p-1\). Let \(d \mid p-1\). For every such \(d\), we shall consider this set
+\[S_d = \left\{ a \ : \ 1\leq a \leq p-1 \text{ and } \ord_p(a) = d\right\}\]
+Notice that, if we take union of \(S_d\) over all the divisors of \(p-1\), we shall get the whole reduced residue system of \(p\). Furthermore, all these \(S_d\)'s are disjoint. Therefore,
+\[ \bigcup_{d \mid p-1} S_d = RRS(p) \implies \boxed{\sum_{d \mid p-1} |S_d| = p-1} \]
+We shall prove in the next class that, the number of solutions (modulo \(p\)) to \(x^d \equiv 1 \amod{p}\) is at most \(d\). The elements of the set \(X = \left\{ a, a^2, a^3, \ldots, a^d \right\} \) satisfies this modular equation and there are \(d\) different elements in \(X\). Therefore, \(S_d\) must be a subset of this \(X\).\\
+Now we claim that, if \(a\in S_d\), then \(a^{i} \in S_d\) if and only if \(\gcd(i,d)=1\). To prove our claim, let \(\gcd(i,d) = g >1\) and \(d = gx, i=gy\) where \(x\) and \(y\) are coprime. 
+\[ b = a^{i} = a^{gy} \implies b^{x} = a^{gxy} = \left(a^d\right)^y \equiv 1 \amod{p}\]
+Obviously \(x\) is smaller than \(d\) because \(g>1\). Thus \(b=a^{i}\) does not have order \(d\). It can be shown easily that, if \(\gcd(i,d) = 1\), then \(a^{i}\) has order \(d\), in other words \(a^{i} \in S_d\). \\
+From this, we can conclude that, \(S_d = \left\{ a^{i} \ : \ \gcd(i,d)=1 \right\} \), and there are at most \(\varphi(d)\) such elements. Therefore, \(|S_d| \leq \varphi(d)\). Putting all the pieces of the puzzle together,
+\[ p-1 = \sum_{d \mid p-1} \varphi(d) \geq \sum_{d \mid p-1} |S_d| = p-1\]
+Therefore, we must have \(|S_d| = \varphi(d)\) for every \(d\). Hence, \(S_{p-1} = \varphi(p-1) >0\). So such element with order \(p-1\) exists.
+\end{proof}
+Not only have we showed that element with order \(p-1\) exists, we've also showed that there are \(\varphi(p-1)\) such elements with order \(p-1\).
+\begin{lemma}
+If \(g\) is a primitive root modulo \(m\) and \(\varphi(m)\) is even, then
+\[g^{\frac{\varphi(m)}{2}} \equiv -1 \pmod{m}\]
+\end{lemma}
+\begin{proof}
+We shall prove the case of \(m\) being prime here. The composite case can be shown using the stronger generalization of Theorem 2.1. \\
+When \(m\) is prime, \(\varphi(m)=m-1=2n\). \(g\) is a primitive root modulo \(m\), so definitely \(\gcd(g,m)=1\). So
+\[g^{2n} \equiv 1 \amod{m} \implies m \mid g^{2n}-1 = (g^n+1)(g^n-1) \implies g^n \equiv \pm 1 \amod{m}\]
+If \(g^n \equiv 1 \amod{m}\), then we get \(\ord_m(g) < \varphi(m)\). Thus we arrive at a contradiction. Therefore, \(g^n \equiv 1 \amod{m}\)
+\end{proof}
+\begin{lemma}
+If \(g\) is a primitive root modulo \(m\), then the set \(S = \left\{ g, g^2, g^3, \ldots, g^{\varphi(m)} \right\} \) is a reduced residue system modulo \(m\).
+\end{lemma}
+\begin{proof}
+\(\gcd(g,m) = 1 \implies \gcd(g^{i},m) = 1\). Therefore, every element of \(S\) is coprime to \(m\). So all we need to show is every element of \(S\) is distinct modulo \(m\). \\
+Assume for the sake of contradiction that there exists some \(a,b\) with \(g^{a} \equiv g^b \amod{m}\). WLOG, \(a>b\). Since \(g\) is coprime with \(m\), we can actually divide both sides by \(g^b\). Then we get,
+\[g^{a-b} \equiv 1 \amod{m}\]
+\(a\) and \(b\) lie between \(1\) and \(\varphi(m)\). So their difference should be strictly smaller than \(\varphi(m)\). Thus we get \(g\) has order smaller than \(\varphi(m)\), which contradicts with the fact that \(g\) is a primitive root modulo \(m\).
+\end{proof}
+Now we shall prove Wilson's theorem, but not the proof you usually see in textbooks. We shall prove it using primitive roots.
+\begin{theorem}[Wilson's Theorem]
+If \(p\) is a prime number, then
+\[(p-1)! \equiv -1 \amod{p}\]
+\end{theorem}
+\begin{proof}
+\(p=2\) is trivial, so we shall consider the case of \(p\) being odd prime.\\
+\(p\) is a prime, so it has a primitive root, namely \(g\). By Lemma 2.4,
+\[\left\{ g, g^2, g^3, \ldots, g^{p-1} \right\} \equiv \left\{ 1,2,3,\ldots, p-1 \right\} \amod{p}\]
+If we multiply all these, we shall get,
+\begin{equation*}
+\begin{split}
+(p-1)! &\equiv 1 \cdot 2 \cdot 3 \cdots (p-1) \\
+&\equiv g \cdot g^2 \cdot g^3 \cdots g^{p-1} \\
+&\equiv g^{1+2+3+\cdots+(p-1)} \\
+&\equiv g^{\frac{(p-1)p}{2}} \\
+&\equiv \left(g^{\frac{p-1}{2}}\right)^p \\
+&\equiv (-1)^p \equiv -1 \amod{p}
+\end{split}
+\end{equation*}
+Thus, we are done.
+\end{proof}
+\begin{theorem}[Generalization of Theorem 2.1]
+Let \(n\) be a positive integer. A primitive root modulo \(n\) exists if and only if
+\[n \in \left\{ 2, 4, p^k, 2p^k \right\} \]
+where \(p\) is an odd prime number.
+\end{theorem}
+I'm not stating the proof here. I'm gonna added it as an exercise problem.
+
+
+\pagebreak
+\section{Quadratic Residue}
+The word ``Quadratic'' suggests that it has something to do with squares, and from the word ``Residue'' you're probably guessing that we will probably work with remainders. Yes, it is what it sounds like. Basically ``Quadratic residue'' deals with the remainders of square numbers. Let's jump into definition. 
+\begin{defn}[Quadratic Residue]
+Let \(m\) be a positive integer. An integer \(n\) is called a \textbf{quadratic residue modulo \(m\)} if there exists some \(x\) such that \(x^2 \equiv n \amod m\). 
+\end{defn}
+For example, \(4\) is a quadratic residue modulo \(5\), because \(7^2 \equiv 4 \amod 5\). But \(3\) is not a quadratic residue modulo \(5\), because there does not exist any integer \(x\) such that \(x^2 \equiv 3 \amod{5}\). 
+\begin{defn}[Quadratic Residue Class]
+Let \(m\) be a positive integer. The Quadratic Residue Class of \(m\), denoted by \(\qr(m)\), is defined as follows:
+\[\qr(m) = \left\{ n : n \text{ is a quadratic reisude modulo }m \right\} \]
+There is an equivalent definition:
+\[\qr(m) = \left\{ x^2 \text{ mod } m \ : \ 0 \leq x \leq m-1 \right\} \]
+\end{defn}
+It's not that hard to see that \(x^2 \equiv (m-x)^2 \amod m\). As a result, the set \(\qr(m)\) will have at most \(\frac{m}{2}+1\) elements. Because two elements contribute to the same quadratic residue. \\
+Now, let's talk about a fundamental result about quadratic residue and primes.
+\begin{proposition}
+Let \(p\) be an odd prime. If \(-1\) is a quadratic residue modulo \(p\), then \(p \equiv 1 \amod 4\)
+\end{proposition}
+\begin{proof}
+Assume for the sake of contradiction that \(p \equiv 3 \amod 4\), and \(-1\) is a quadratic residue modulo \(p\). That is, there exists some positive integer \(x\) such that \(x^2 \equiv -1 \amod p\). \\
+As \(p \equiv 3 \amod 4\), we can express \(p\) as \(4k+3\) form. Also, \(p \mid x^2 + 1\) gives us \(\gcd(x,p)=1\). Therefore, by \textit{Fermat's Little Theorem},
+\[x^{p-1} \equiv 1 \amod{p} \implies 1 \equiv x^{4k+2} \equiv \left(x^2\right)^{2k+1} \equiv \left(-1\right)^{2k+1} \equiv -1 \amod{p} \]
+which leads to a contradiction. Therefore, \(p \equiv 1 \amod 4\).
+\end{proof}
+However, this proposition does not necessarily imply that \(-1\) is a quadratic residue for every prime of the form \(4k+1\). But it can be shown easily that for every prime of such form, you can find a positive integer \(x\) with \(x^2 \equiv -1 \amod p\).
+\begin{lemma}
+If \(p\equiv 1 \amod 4\) is a prime, then there exists a positive integer \(x\) with \(x^2 \equiv -1 \amod p\).
+\end{lemma}
+\begin{proof}
+We shall prove it by constructing such \(x\). The construction is motivated by \textit{Wilson's Theorem}. Wilson's theorem says that, if \(p\) is a prime, then \((p-1)! \equiv -1 \amod{p}\). We are given that \(p\) is a prime of the form \(4k+1\). Substituting this into Wilson's theorem, we get that
+\[1 \cdot 2 \cdot 3  \cdots (2k) \cdot (2k+1) \cdots (4k-1) \cdot 4k \equiv -1 \amod p\]
+Our main idea is to express the LHS as a square. How can we do it? Notice that,
+\begin{equation*}
+\begin{split}
+4k &\equiv -1 \amod{p} \\
+4k-1 &\equiv -2 \amod{p} \\
+4k-2 &\equiv -3 \amod{p} \\
+&\cdots \\
+2k+2 &\equiv -(2k-1) \amod{p} \\
+2k+1 &\equiv -2k \amod{p}
+\end{split}
+\end{equation*}
+If we multiply all these, we would get, 
+\[(2k+1)(2k+2)\cdots (4k-2)(4k-1)4k \equiv 1 \cdot 2 \cdot 3 \cdots (2k-1)\cdot 2k \amod{p}\]
+The negative signs got canceled out because an even number of negative numbers are multiplied. Now, if we substitute this into Wilson's theorem, we get
+\[\left(1 \cdot 2 \cdot 3 \cdots (2k-1)\cdot 2k\right)\left(1 \cdot 2 \cdot 3 \cdots (2k-1)\cdot 2k\right) \equiv -1 \amod{p} \implies \left((2k)!\right)^2 \equiv -1 \amod{p}\]
+Thus we have successfully constructed such \(x\). So we are done.
+\end{proof}
+
+I intend to discuss about quadratic residues more in the diophantine equations note. In this note, I wanna introduce about Legendre Symbol.
+\begin{defn}[Legendre Symbol]
+The Legendre symbol for a positive integer \(n\) and a prime \(p\) is denoted by \(\left(\dfrac{n}{p}\right) \) and defined as:
+\[
+\left(\dfrac{n}{p}\right) = \left\{ \begin{array}{ll}
+0 & \quad \text{if } p \mid n \\
+1 & \quad \text{if } n \in \qr(p) \\
+-1 & \quad \text{if } n \not\in \qr(p)
+\end{array}\right.
+\]
+\end{defn}
+The definition is basically saying that, if \(p \mid n\), then \(\left(\dfrac{n}{p}\right)\) is \(0\). When \(p\nmid a\), we have two cases. If \(n\) is a quadratic residue modulo \(p\), then \(\left(\dfrac{n}{p}\right)\) is \(1\), otherwise it's \(-1\). \\
+Now you may ask, ``\(0\) is always a quadratic residue modulo \(p\). \(p \mid n\) means \(n \equiv 0 \amod{p}\), so \(n\) is a quadratic residue modulo \(p\). Why didn't we put \(1\) as the value of \(\left(\dfrac{n}{p}\right)\)? Doesn't it make more sense to have \(1\) for \textbf{all} quadratic residues?'' Well, the definition is of Legendre Symbol has a greater purpose to serve other than denoting quadratic residue. That greater purpose is our next theorem.
+\begin{theorem}[Euler's Criterion]
+\[ \left(\dfrac{n}{p}\right) = n^{\frac{p-1}{2}} \ \text{ mod } p\]
+\end{theorem}
+\begin{proof}
+If \(p\mid n\), then the result is trivial. So let's assume \(p\nmid n\). \\
+If \(n\) is a quadratic residue, then \(n \equiv x^2 \amod p\). By Fermat's Little Theorem,
+\[x^{p-1} \equiv 1 \amod{p} \implies \left(\dfrac{n}{p}\right) = 1 \equiv \left(x^2\right)^{\frac{p-1}{2}} \equiv n^{\frac{p-1}{2}} \amod{p}\]
+Now, all we are left with is, whenever \(n\) is not a quadratic residue, \(n^{\frac{p-1}{2}} \equiv -1 \amod{p}\). We shall need Wilson's theorem for this. \\
+Take any integer \(x\) with \(1 \leq x \leq p-1\). Take \(y = nx^{-1}\), where \(x^{-1}\) denotes the multiplicative inverse of \(x\) modulo \(p\)\footnote{This basically means that \(xx^{-1} \equiv 1 \amod{p}\)}. Therefore, we have
+\[ xy \equiv x \amod p\]
+Notice that, \(x\) and \(y\) can't be equal. Because if \(x\) and \(y\) are equal, then \(n\) becomes a quadratic residue modulo \(p\). \\
+If we choose a different \(x\), we shall get a different \(y\). Thus, we can divide all the integers from \(1\) to \(p-1\) in \(\frac{p-1}{2}\) pairs of \((x,y)\). Let the pairs are \((x_1, y_1), (x_2, y_2), \ldots, (x_{\frac{p-1}{2}}, y_{\frac{p-1}{2}})\). Using Wilson's theorem,
+\begin{equation*}
+\begin{split}
+-1 &\equiv (p-1)! \equiv 1 \cdot 2 \cdot 3 \cdots (p-1) \\
+&\equiv (x_1y_1)\cdot (x_2y_2) \cdots (x_{\frac{p-1}{2}} y_{\frac{p-1}{2}}) \\
+&\equiv n \cdot n \cdots n \\
+&\equiv n^{\frac{p-1}{2}} \amod{p}
+\end{split}
+\end{equation*}
+Thus, we are done.
+\end{proof}
+Legendre Symbol has some very nice properties. I'm not proving these, you should try to prove them yourself.
+\begin{lemma}
+The Legendre Symbol \(\left(\dfrac{n}{p}\right) \) has the following properties:
+\begin{enumerate}[i.]
+\item If \(p\nmid ab\), then \(\left(\dfrac{ab}{p}\right) = \left(\dfrac{a}{p}\right) \left(\dfrac{b}{p}\right)\)
+\item \(\left(\dfrac{2}{p}\right) = (-1)^{\frac{p^2-1}{8}}\)\\
+\item If \(p\) and \(q\) are distinct odd primes, then 
+\(\left(\dfrac{q}{p}\right)\left(\dfrac{p}{q}\right) = (-1)^{\frac{p-1}{2} \frac{q-1}{2}}\)
+\end{enumerate}
+\end{lemma}
+The last one is known as ``The Law of Quadratic Reciprocity''.
+\pagebreak
+
+
+\section{Exercise Problems}
+\begin{problem}
+Find all positive integers \(n\) such that \(n \mid 2^n -1\).
+\end{problem}
+\begin{problem}
+Find all pairs of prime numbers \(p,q\) such that \(pq \mid (5^p-2^p)(5^q-2^q)\).
+\end{problem}
+\begin{problem}
+Find all triplets of prime numbers \(p,q,r\) such that
+\[p \mid q^r+1 , \quad q\mid r^p +1 , \quad r \mid p^q+1\]
+\end{problem}
+\begin{problem}
+Let \(p\ge2\) be a prime number. Find all positive integer \(k\) such that \(p\) divides
+\[1^k + 2^k + 3^k +\cdots +(p-1)^k\]
+\end{problem}
+\begin{problem}
+Let \(g\) be a primitive root modulo \(n\). Then \(g^m\) is also a primitive root modulo \(n\) if and only if \(m\) is relatively prime to \(\varphi(n)\).
+\end{problem}
+\begin{problem}
+Let \(n\) be an odd positive integer. Show that there exists a primitive root modulo \(n\) if and only if there exists a primitive root modulo \(2n\)
+\end{problem}
+\begin{problem}
+Let \(p\) be an odd prime and \(g\) be a primitive root modulo \(p\). Then either \(g\) or \(g+p\) is a primitive root modulo \(p^k\) for every \(k\ge 1\).
+\end{problem}
+\begin{problem}
+If any exists, there are exactly \(\varphi(\varphi(n))\) primitive roots modulo \(n\).
+\end{problem}
+\begin{problem}
+For each non-negative integer \(m\), let \(n_{m}=101 m-100 \cdot 2^{m} \). Let \(a, b, c, d\) be integers with \(0 \leq a, b, c, d \leq 99\) such that \[n_{a}+n_{b} \equiv n_{c}+n_{d} \amod{10100}\]
+\end{problem}
+\begin{problem}
+Find all pairs of positive integers \((a, b)\) such that \(a b(a+b)\) is not divisible by 7 , but \((a+b)^{7}-a^{7}-b^{7}\) is divisible by \(7^{7}\).
+\end{problem}
+\begin{problem}
+Find all pairs of positive integers \(x,y\) such that \(4xy-x-y\) is a perfect square.
+\end{problem}
+\begin{problem}
+\(a,b\) are coprime positive integers and \(p\) is an odd prime number. If \(p \mid a^2 + b^2\), show that \(p\equiv 1 \amod{4}\)
+\end{problem}
+\begin{problem}
+Find all triplets of positive integers \(a,b,c\) such that \(a^2+1=b(2^c-1)\)
+\end{problem}
+\begin{problem}
+Prove Lemma 3.4
+\end{problem}
+\begin{problem}
+Prove Theorem 2.6
+\end{problem}
+
+\end{document}

@@ -1,0 +1,427 @@
+\documentclass[11pt]{scrartcl}
+\usepackage{atonu}
+\usepackage{fullpage}
+\usepackage{amsmath,amsthm, amsfonts}
+
+
+\begin{document}
+\title{Diophantine Equations}
+\subtitle{BdMO National Camp 2021}
+\author{\scshape{Atonu Roy Chowdhury} \\
+\mailto{atonuroychowdhury@gmail.com}}
+\date{\today}
+\maketitle
+
+\section{What is Diophantine Equation?}
+In our school textbooks, we often solve equations. But most of the equations are ``algebraic''. By ``algebraic'', I mean you had to solve them for real numbers. But in Diophantine Equations, we are given an equation and we have to find the integer solutions or positive integer solutions of that equation. Sounds fun, right? Alright, let's dive into some diophantine equations, shall we?
+% Some historical remark: Diophantine equation is named after greek mathematician Diophantus. In his book \textit{Arithmetica}, he discussed about the solution of algebraic equations and the theory of numbers. It contains about 150 peoblems about solvability of equations. There were some cool number theoretic results, such that ``no integer of the form \(8n+ 7\) can be written as the sum of three squares.'' Diophantus is the first known human to work with integer solutions of equations. That's why Diophantine equation is named after him. \\
+
+\section{Linear Diophantine Equations}
+If I ask you, ``How many solutions are there to the equation \(3x+6y=7\)?'' you'll probably say that ``There are infinitely many solutions. \(3x+6y=7\) denotes a line in the Cartesian coordinate so it contains infinitely many points.'' And you are absolutely correct. But things get more interesting when I tell you to find the integer solutions.\\
+Well, if you play around with things a bit, you will find that there is \textbf{no} integer solution to this equation. Because the LHS is \(3x+6y = 3(x+2y)\) which is obviously divisible by \(3\) as \(x,y\) are integers. But the RHS is \(7\), which is not divisible by 7. Hence, a contradiction. \\
+Now, if the RHS was divisible by \(3\), for instance \(\text{RHS} = 9\), would the equation have integer solutions? If yes, how many? \\
+Well, one solution is very easy to find, that is \(x=1, y=1\). But are there other solutions? Turns out, there are. \(x=-1, y=2\) is another possible solution. If you work around with things, you will find that there are actually infinitely many solutions to this particular equation. \\ 
+Now a natural question arises: when does a linear diophantine equation have solutions? To find the answer, we need Bezout's Identity.
+\begin{theorem}[Bezout's Identity]
+Let \(a\) and \(b\) be positive integers and \(\gcd(a,b)=d\). Then there exists some \textbf{integer} \(x\) and \(y\) such that
+\[ax+by = d\]
+\end{theorem}
+This is actually not that hard to prove. We can use extremal principle to prove this.
+\begin{proof}
+Let \(S\) be the set of all positive integers that can be written as \(ax+by\) for some \textbf{integer} \(x\) and \(y\). That is
+\[S = \left\{ n\in \NN : n = ax+by \text{ for some integer } x \text{ and } y \right\} \]
+Since it's a subset of \(\NN\), there exists a smallest value in this set. Let \(m = \min(S)\). We claim that \(m = d\). \\
+To show that \(m=d\), it's enough to show that \( m \mid d\) and \(d \mid m\). The latter is actually easy to see. Since \(m \in S\), \(m = an + bk\) for some integer \(n\) and \(k\).
+\[d = \gcd(a,b) \implies d \mid a, d \mid b \implies d\mid an + bk \implies d \mid m\]
+Now we wanna show the other direction. If we divide \(a\) by \(m\), we shall get some quotient and some remainder. So, \(a = qm + r\), where \(0 \leq r < m\). Now,
+\[ r = a - qm = a - q (an + bk) = a (1-qn) - b(qk)\]
+Therefore, \(r\) can also be written as the form \(ax+by\). If \(r>0\), then \(r \in S\) which contradicts the minimality of \(m\). Therefore \(r=0\) and hence \(m \mid a\). In a similar manner, it can be shown that \(m \mid b\). Therefore \(m \mid \gcd(a,b)=d\) and we are done.
+\end{proof}
+\begin{corollary}
+The equation \(ax+by=c\) has solutions in integer if and only if \(\gcd(a,b) \mid c\).
+\end{corollary}
+This follows immediately from Bezout's identity. So I'm not gonna state the proof here. Now we will see that, whenever a linear diophantine equation has solution, it actually has infinitely many solutions. Furthermore, the solutions have a common form.
+\begin{lemma}
+If \((x_0, y_0)\) is a solution to \(ax+by = c\), then all the solutions of this equation are of the form \[x = x_0 + t\frac{b}{d}, \quad y= y_0 - t\frac{a}{d}\]
+where \(d\) is the gcd of \(a\) and \(b\).
+\end{lemma}
+\begin{proof}
+\(d = \gcd(a,b) \implies a = da', b=db'\) where \(\gcd(a,b)=1\). \((x_0, y_0)\) is a solution to \(ax+by = c\), let \((x_1, y_1)\) be another solution. Then,
+\begin{equation*}
+\begin{split}
+&\textcolor{white}{\implies} ax_1+by_1 = c = ax_0+by_0 \\
+&\implies da'(x_1- x_0) = db'(y_0 - y_1) \\
+&\implies a'(x_1- x_0) = b'(y_0 - y_1) \\
+&\implies a'\mid y_0 - y_1 , \quad b' \mid x_1- x_0 \\
+&\implies y_1 = y_0 - a't , \quad x_1 = x_0 + b't
+\end{split}
+\end{equation*}
+Hence, we are done.
+\end{proof}
+Now we wish to apply this into a real problem. 
+\begin{exercise}
+Suppose you went to a restaurant where they sell Chicken Nuggets in packs of \(9\) and packs of \(20\). What is the largest number of nuggets that you can't get from that restaurant?
+\end{exercise}
+The problem is basically asking that, what is the largest value of \(n\) such that \(n = 9x + 20 y\) does not have any solution in non-negative integers? \(9\) and \(20\) are fairly small numbers. So you can find out by getting your hand dirty that the highest number of nuggets that you can't buy from that restaurant is \(151\). But if I ask you the same question with \(289\) and \(475\) instead of \(9\) and \(20\), can you still find it out by getting your hand dirty? I suppose not. So we need some kind of general formula for it. And that general formula is \textit{Chicken-McNugget Theorem}.
+\begin{theorem}[Chicken-McNugget Theorem]
+Let \(a\) and \(b\) be two coprime positive integers. Suppose \(f(a,b)\) denotes the largest number \(n\) such that the equation \(n = ax+by\) has no solution in non-negative integers. Then \[f(a,b) = ab - a - b\]
+\end{theorem}
+\begin{proof}
+The proof consists of two parts. The first part is showing that \(n = ab - a - b\) leads us no solution in non-negative integers to the equation \(n = ax+by\). The second part is showing that for every \(n> ab - a - b\), we can always find a solution in non-negative integers to the equation \(n = ax+by\). \\
+For the first part, assume for the sake of contradiction that there exists some non-negative integers \(x\) and \(y\) such that \(ax + by = ab - a - b\). Taking the equation in \(\text{mod }a\), we get
+\[by \equiv -b \amod{a} \implies y \equiv -1 \amod{a} \implies \boxed{y \geq a-1}\]
+Here we could divide both sides of the modular equation by \(b\) because \(b\) is coprime to \(a\). Similarly, by taking \(\text{mod }b\), we will get that \(\boxed{x \geq b-1}\). Therefore, 
+\[ab - a - b = ax + by \geq a(b-1) + b(a-1) = 2ab - a -b\]
+Contradiction!\\
+Now for the second part, consider any integer \(n > ab - a -b\). Since \(\gcd(a,b)=1\), by \textit{Bezout's Identity} we can find integers \(x'\) and \(y'\) such that \(ax' + by' = 1\). Multiplying both sides by \(n\), we get an integer solution to the solution \(ax+by=n\).
+\[ax' + by' = 1 \implies a(x'n) + b(y'n) = n \implies ax_0 + by_0 = n\]
+But we had to find non-negative integer solution to this equation. No worries, we showed in \textit{Lemma 2.3} that, if we have one solution to the linear diophantine equation then we can find all the solutions. So the general solution to \(ax+by = n\) is given by
+\[x = x_0 + tb, \quad y = y_0 - ta\]
+So we need to show that, upon choosing the correct \(t\), we can make both \(x\) and \(y\) non-negative.
+\[ax+by = n > ab-a-b \implies \boxed{b(y+1) > a(b -1 -x)}\]
+Therefore, \(y+1\) is positive (in other words, \(y\) is non-negative) if \(b-1 \geq x\). So if we can keep \(x\) between \(0\) and \(b-1\) inclusive, then we are basically done. \\
+In fact, it's not actually hard to achieve. If we divide \(x_0\) by \(b\), we get some quotient and remainder. So \(x_0 = qb + r\). Notice that, remainder is always non-negative, so \(0\leq r \leq b-1\). Now if we choose \(t = -q\), then \(x = x_0 + tb = qb + r -qb = r\). Thus we can achieve \(0 \leq x \leq b-1\). \\
+Now, the conclusion becomes trivial. 
+\[b(y+1) > a(b -1 -x) \geq 0 \implies y+1 >0 \implies y \geq 0\]
+So \(ax+by=n\) has solution in non-negative integers.
+\end{proof}
+Now, what about equations with more than \(2\) variables? Let's see an example.
+\begin{exercise}
+Find all integer solutions of the following equation:
+\[3x+4y+5z=6\]
+\end{exercise}
+\begin{soln}
+Here we have 3 variables, but we can make it 2-variable equation. One way to do it is taking the mod of any coefficient. Generally it's a good practice to take mod of the highest coefficient. So taking mod \(5\), we get
+\[3x + 4y \equiv 1 \amod 5 \implies \boxed{3x + 4y = 1 + 5s} \implies 6 - 5z = 1+5s \implies \boxed{ z = 1-s}\]
+Now we have a 2-variable linear diophantine equation to deal with: \(3x + 4y = 1 + 5s\). Can you find one solution to this equation? A bit of trial and error gives us \(x = -1+3s , y = 1-s\) is one solution. So by \textit{Lemma 2.3} we can get all the solutions:
+\[x = -1+3s + 4t , y = 1-s -3t , z = 1-s\]
+It is easy to verify that these values indeed satisfy the equation. 
+\end{soln}
+
+\section{Whenever in confusion, factor it out}
+Factoring is often useful in solving diophantine equations. For instance, if you have an equation like \(xy = 6\), then you can reduce it into 4 cases: \(x=1, y=6\); \(x=2, y=3\); \(x=3, y=2\); \(x=6, y=1\). And this might often reduce the complexity of the problem.
+\begin{exercise}
+Solve in positive integers:
+\[xyz+x+y+z = 2 + xy+yz+zx\]
+\end{exercise}
+\begin{soln}
+If we isolate the variables,
+\[xyz+x+y+z -xy -yz -zx= 2\]
+Let's try to factorize the LHS.
+\[x(yz+1 -y - z) - (yz -y - z) = 2\]
+If we had a \(-1\) in the LHS, then we could factorize it easily. So let's borrow a \(-1\) from the RHS.
+\[x(yz+1 -y - z) - (yz -y - z +1) = 1 \implies (x-1)(y-1)(z-1)=1\]
+\(x,y,z\) are positive integers, so \(x-1, y-1, z-1\) are non-negative integers. Three non-negative integer's product can be \(1\) only if they are all \(1\). Therefore,
+\[x-1 = y-1 = z-1 =1 \implies \boxed{x=y=z=2}\]
+\end{soln}
+There is a popular factoring trick in Olympiad Folklore. It's popularly known as \textbf{SFFT} or \textit{Simon's Favorite Factoring Trick}. What does this trick do? It basically factorises an equation of the form \[Axy + Bx + Cy + D =0\]
+After factorizing, things get easier to work with. The best idea of illustrating this trick would be showing an example. 
+\begin{exercise}
+Find all primes \(p,q,r\) such that
+\[pqr = 19(p+q+r)\]
+\end{exercise}
+\begin{soln}
+The RHS is divisible by \(19\), which is a prime number. The LHS is the product of three prime numbers. So one of them must be \(19\). WLOG, \(r = 19\). So the equation becomes
+\[pq = p+q+19 \implies pq-p-q=19\]
+If we had a \(1\) in the LHS, then we could factorize it without any trouble. So let's add \(1\) on both sides:
+\[pq-p-q = 19 \implies pq-p-q+1=20 \implies (p-1)(q-1)=20\]
+The rest is left as an exercise for the reader.
+\end{soln}
+\begin{exercise}
+Find the smallest value of \(n\) for which the following equation has \(69\) different solutions for \((x,y)\):
+\[\frac1x + \frac1y = \frac1n\]
+\end{exercise}
+\begin{soln}
+Let's try to isolate the variables in the given equation:
+\[\frac1x + \frac1y = \frac1n \implies \frac{x+y}{xy}= \frac{1}{n} \implies xy - nx -ny =0\]
+As we try to factorize this, we feel the absence of \(n^2\). We have the liberty to add it on both sides, so why don't we do it?
+\[xy - nx -ny =0 \implies xy - nx -ny +n^2=n^2 \implies \boxed{(x-n)(y-n) = n^2}\]
+Now, we have to find out the smallest \(n\) for which there are \(69\) different pairs of \((x,y)\) satisfying \((x-n)(y-n) = n^2\). If you play around things a bit, you'll get that, the number of solutions is precisely the number of divisors of \(n^2\). So the question now translates into: find the smallest \(n\) with \(\tau(n^2)=69\).\\
+\(69 = 1\times 69 = 3 \times 23\). So the possible values for \(n^2\) are either \(p^{68}\) and \(p^{22}q^2\) where \(p\) and \(q\) are primes. The smallest value of \(p^{68}\) is \(2^{68}\). The smallest value of \(p^{22}q^2\) is \(2^{22}3^2\). As \(2^{68} > 2^{22}\ 3^2\), we can conclude that, \(2^{22}\ 3^2\) is the smallest possible value of \(n^2\). Therefore, the smallest possible value of \(n\) is \(2^{11}\ 3\).
+\end{soln}
+
+
+
+\section{The Legend, The Myth -- The ``Chipa'' Trick}
+The ``Chipa'' Trick is a bounding strategy for solving diophantine equations. It's specially useful when the problem statement looks like this: ``Find all integer \(x\) such that \(f(x)\) is a perfect \(n\)-th power.'' In that case if you can show that \((y+1)^n < f(x) < y^n\), then you can conclude that no such \(x\) exists. Because if there existed such \(x\), \(f(x)\) couldn't lie strictly between two consecutive \(n\)-th power. \\
+In this trick, we try to show something like this: \(X \leq Y \leq Z\), which can be interpreted as \(Y\) inside the ``Chipa'' of \(X\) and \(Z\). That's why this trick is known as ``Chipa'' trick in BdMO camps. Let's try some problems using this trick.
+\begin{exercise}
+Find all positive integers such that \(n^2 -19n +89\) is a perfect square.
+\end{exercise}
+\begin{soln}
+The given expression is \(n^2 -19n +89\). Here \(19\) is an odd number. If it were even, we could try something like this: \(n^2 - 2kn + k^2\). But as it's odd number, it's inside the ``chipa'' of two even numbers. So, 
+\[n^2 -20n < n^2 -19 n < n^2 - 18n\]
+The constants don't matter much. Therefore, after some \(n\), we shall get that,
+\[ n^2 -20n +100< n^2 -19 n + 89< n^2 - 18n + 81 \implies (n-10)^2 < n^2 -19n +89 < (n-9)^2\]
+We got our ``chipa''! Now if you play with this inequality a bit, you will find that this inequality holds for \(n>11\). That means, when \(n\geq 12\), \(n^2 -19n +89 \) lies strictly between two consecutive squares, so it can't be square. \\
+We still have a bit of labour left, We have to calculate by hand for \(n = 1\) to \(11\). Checking these, we get that, only \(n=8\) and \(n=11\) makes \(n^2 -19n +89\) a perfect square.
+\end{soln}
+\begin{exercise}
+Find all positive integers \(x,y,z\) such that
+\[x^2 + y^2 + z^2 + 2xy + 2y(z-1) + 2x(z+1)\]
+is a perfect square.
+\end{exercise}
+\begin{soln}
+Let \(x^2 + y^2 + z^2 + 2xy + 2y(z-1) + 2x(z+1) = n^2\). The ``chipa'' is fairly easy to find here. Because the given expression kinda looks like \((x+y+z)^2\), but with \(z+1\) and \(z-1\) instead of \(z\). So the ``chipa'' is:
+\[(x+y+z-1)^2 < n^2 < (x+y+z+1)^2\]
+So \(n\) must be \(x+y+z\). Substituting this, we shall get that \(x = y\). So \((x,y,z)=(m,m,k)\) is all the solutions.
+\end{soln}
+\begin{exercise}
+Find all solutions in positive integers of the equation
+\[
+x^{3}+(x+1)^{3}+(x+2)^{3}+\cdots+(x+7)^{3}=y^{3}
+\]
+\end{exercise}
+\begin{soln}
+It's not hard to see that \(x^{3}+(x+1)^{3}+(x+2)^{3}+\cdots+(x+7)^{3} = 8x^3 + 84x^2 + +420x + 784\). So you get the idea that the ``chipa'' should be \((2x+a)^3 < y^3 < (2x+b)^3\). You should be able to figure out what \(a\) and \(b\) should be. I'll leave the rest as an exercise for you.
+\end{soln}
+
+\section{Discriminant}
+You've probably learned about quadratic equation \(ax^2 + bx + c =0\) in high school. The solution of this kind of 2-degree equation is given by:
+\[x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}\]
+Notice that, the nature of the solutions depend on \(b^2-4ac\). This expression is called discriminant. We want integer solutions here. So we must have a perfect square discriminant. \[\Delta = b^2 -4ac = k^2\]
+This trick is often useful. When we have 2 variables, we can find the value of one variable using \textbf{discriminant is perfect square}. Then solving for the other variable becomes a much easier job.
+\begin{exercise}
+Find all positive integer \(n\) such that \(n^2 - 59n + 881\) is a perfect square.
+\end{exercise}
+I believe many of you can solve this problem using ``chipa'' trick. So I'm gonna show a solution using discriminants.
+\begin{soln}
+\(n^2 - 59n + 881 = k^2 \implies n^2 - 59n + 881 - k^2 =0\). Now if we treat \(n\) as variable and \(k\) as constant, then the equation becomes a quadratic. So the discriminant must be a perfect square.
+\[a^2 = \Delta = 59^2 - 4 (881-k^2) = 4k^2 - 43 \implies 43= 4k^2 - a^2 = (2k+a)(2k-a)\]
+which gives us \(k=11\). Plugging this into our main equation, 
+\[n^2 - 59n + 881 = 121 \implies n^2 - 59n +760 = 0\]
+which has solutions \(n=19\) and \(n=40\).
+\end{soln}
+\begin{exercise}
+Solve in positive integers:
+\[(x^2+y)(x+y^2)=(x−y)^3\]
+\end{exercise}
+\begin{soln}
+Expanding out, we get
+\begin{equation*}
+\begin{split}
+&\textcolor{white}{\implies} (x^2+y)(x+y^2)=(x−y)^3 \\
+&\implies x^3 + y^3 + x^2 y^2 + xy = x^3 - y^3 - 3 x^2 y + 3xy^2 \\
+&\implies y(y^2 + x^2 y + x ) = y(-y^2 -3x^2 + 3xy)\\
+&\implies y^2 + x^2 y + x +y^2 +3x^2 - 3xy = 0\\
+&\implies 2y^2 + (x^2 -3x) y + (3x^2 +x) = 0
+\end{split}
+\end{equation*}
+This is a quadratic equation on \(y\). So the discriminant \(\Delta = (x^2 -3x)^2 - 4\cdot 2 (3x^2 +x)\) must be a perfect square. The rest is left as an exercise for the reader.
+\end{soln}
+
+\section{Infinite Descent}
+Infinite descent is often a very useful trick to solve diophantine equations. In this trick, we assume that some solution exist and we take the solution with least sum. Then we show that there exists another solution with even less sum. Hence we arrive at a contradiction. Let's jump into some examples:
+\begin{exercise}
+Prove that the equation \(a^2+b^2= 3c^2\) has no solutions in positive integers.
+\end{exercise}
+\begin{soln}
+Assume for the sake of contradiction that some solutions exist. We take one such solution \(a_1, b_1, c_1\) such that \(a_1 + b_1 + c_1\) is the smallest. \\
+Notice that \(\qr(3) = \left\{ 0,1 \right\} \). The RHS is divisible by \(3\), hence \(3 \mid a_1^2 + b_1^2\). Then it's easy to see that, we must have \(a_1^2 \equiv 0 \amod 3\) and \(b_1^2 \equiv 0 \amod 3\). In other words, \(3 \mid a_1\) and \(3\mid b_1\). Substituting \(a_1 = 3a_2\) and \(b_1 = 3b_2\) we get,
+\[
+	(3a_2)^2 + (3b_2)^2 = 3c_1^2 \implies 3 (a_2^2+b_2^2) = c_1^2 \implies 3 \mid c_1
+\]
+Now, substituting \(c_1 = 3c_2\), we get
+\[
+	3 (a_2^2+b_2^2) = (3c_2)^2 \implies a_2^2+b_2^2 = 3c_2^2
+\]
+Here \(a_2 = \frac{a_1}{3}, b_2 = \frac{b_1}{3}, c_2 = \frac{c_1}{3}\) and \((a_2, b_2, c_2)\) is also a solution to the give equation. So we found a solution with even less sum than the least sum. Hence contradiction!
+\end{soln}
+\begin{exercise}
+Solve in positive integers: \(x^3 + 2y^3 = 4z^3\)
+\end{exercise}
+The solution is left as an exercise for the reader.
+
+\section{A Magical Mod}
+These type of problems require a magical mod. Like if you take mod \(n\) on both sides, you might arrive at some contradiction, or you might get some new information about the problem. But when you are reading the solution, you might be wondering: how did this specific mod came out of nowhere? Well, I'm gonna try to explain the intuitions behind these mods. 
+\begin{exercise}
+Let \(d\) be any positive integer not equal to \(2, 5, 13\). Show that one can find distinct \(a, b\) in the set \(\{2,5,13, d\}\) such that \(ab−1\) is not a perfect square.
+\end{exercise}
+The problem is basically saying that: whatever \(d\) is, not all of \(2d-1, 5d-1, 13d-1\) are perfect squares. So intending to show a contradiction, we assume otherwise. We got three diophantine equations to solve:
+\begin{equation*}
+\begin{split}
+2d-1 &= x^2 \\
+5d -1 &= y^2 \\
+13d-1 &= z^2
+\end{split}
+\end{equation*}
+Here we have perfect squares to deal with. We need a magical mod. What should it be? Keep in mind that, our magical mod should have a relatively smaller quadratic residue class. Because if the quadratic residue class is too large, then we will have LOTS of cases to consider. That's why primes are not a good candidate for this. Because 
+\[ \abs{\qr(p)} = 1 + \frac{p-1}{2}\]
+which is not really much of improvement. Turns out powers of \(2\) are the best candidates. It can be proved that 
+\[\abs{ \qr \left(2^n\right) } = \ceiling{\frac{2^n}{6}} + 1\]
+which is almost thrice as good as primes. So the lesson from this problem is: \textbf{Whenever you have squares to deal with, try taking mods of power of \(2\). Such as: 4, 8, 16 etc.}. Let's dive into the solution then.
+\begin{soln}
+We have to show that, there does not exist any \(d\) that satisfies all of the following equations:
+\begin{equation*}
+\begin{split}
+2d-1 &= x^2 \\
+5d -1 &= y^2 \\
+13d-1 &= z^2
+\end{split}
+\end{equation*}
+You can try taking mod \(4\) or mod \(8\). But they don't produce any contradiction. Do we give up? \textbf{NO!} We can try taking mod \(16\). It's not hard to verify that
+\[ \qr(16) = \left\{ 0,1,4,9 \right\}  \]
+Therefore, \(2d-1\) is a perfect square if \(2d-1 \in \left\{ 1,9 \right\} \amod{16}  \implies d \in \left\{ 1,5 \right\} \amod{8} \implies \boxed{d \in \left\{ 1,5,9,13 \right\} \amod{16}}\). \\
+\(5d-1\) is a perfect square if \(5d-1 \in \left\{ 0,1,4,9 \right\}\). If you work with this, you'll find that this is equivalent to \(\boxed{d \in \left\{ 1,2,10,13 \right\} \amod{16}} \). Similarly, \(13d-1\) is a perfect square if \(\boxed{d \in \left\{ 2,5,9,10 \right\} \amod{16}}\). \\
+There is no common \(d\) in these three sets. So there does not any \(d\) for which all of \(2d-1, 5d-1, 13d-1\) are squares.
+\end{soln}
+Okay, we've learnt that \(2^n\) is a very good candidate when we need to deal with squares. But what about the higher powers? If we need to deal with \(x^d\), then it's often a good practice to deal with mod \(p\), where \(p\) is a prime with \(d \mid p-1\). \\
+Now you may ask why. The answer is: whenever \(d \mid p-1\), \(x^d\) can take exactly \(1+\frac{p-1}{d}\) different remainders upon division by \(p\).\footnote{You can prove it, I'll leave it as an exercise for you.} \(1+\frac{p-1}{d}\) is a pretty small number when \(d\) gets larger. So it's not that hard to work with such \(p\). \\
+Alright, let's look at some examples.
+\begin{exercise}
+Find all integer solutions: \(x^3+y^4=7\)
+\end{exercise}
+\begin{soln}
+We have power \(3\) and power \(4\) here. So a prime \(p\) with \(3 \mid p-1\) and \(4 \mid p-1\) might do the job. Turns out, \(13\) is one such prime. If we take mod \(13\),
+\[x^3 \equiv 0,1,5,8,12 \amod{13}, \quad y^4 \equiv 0,1,3,9 \amod{13}\]
+We cannot make the sum \(7\). Thus, there does not exist any integer with \(x^3+y^4=7\).
+\end{soln}
+\begin{exercise}
+Solve in integers: \(x^5 - y^2 = 4\)
+\end{exercise}
+\begin{soln}
+We need a prime such that \(5 \mid p-1\). \(p=11\) is one such prime. Taking mod \(11\),
+\[x^5 \equiv 0,1,-1 \amod{11} \implies y^2 = x^5 - 4 \equiv 6,7,8 \amod{11}\]
+But \(\qr(11) = \left\{ 0,1,4,9,5,3 \right\} \). So no solution.
+\end{soln}
+\begin{exercise}
+Solve in positive integers: \(3^x - 2^y = 7\)
+\end{exercise}
+\begin{soln}
+If \(y=1\), we get a solution \((x,y) = (2,1)\). So assume \(y\geq 2\). Therefore \(4 \mid 2^y\). Taking mod \(4\), we get
+\[3^x \equiv -1 \amod 4\]
+If \(x\) is even, then it's never possible. So we must have \(x=2k+1\) for some integer \(k\). We need to improve our mod now. So let's take mod \(8\). 
+\[3^{x} = 3\cdot 3^{2k} = 3 \cdot 9^k \equiv 3 \amod{8} \implies 7+ 2^y \equiv 3 \amod{8}\]
+which is not possible for \(y\geq 3\). We can check \(y=2\) by hand but it does not produce any solution. \\
+Hence the only solution is \((x,y) = (2,1)\).
+\end{soln}
+
+\section{Practice Problems}
+\begin{problem}
+Prove that the expression
+\[\frac{\gcd(m,n)}{n} \binom{n}{m}\]
+is an integer for all pairs of integers \(n \geq m \geq 1\).
+\end{problem}
+\begin{problem}
+Let \(a\) and \(b\) be coprime positive integers. Prove that there are exactly \(\frac{(a-1)(b-1)}{2}\) integers that cannot be written as \(ax+by\) for non-negative integer \(x,y\).
+\end{problem}
+\begin{problem}
+Let \(a, b\), and \(c\) be positive integers, no two of which have a common divisor greater than 1. Show that \(2 a b c-a b-b c-c a\) is the largest integer that cannot be expresed in the form \(x b c+y c u+z a b\), where \(x, y\), and \(z\) are nonnegative integcrs.
+\end{problem}
+\begin{problem}
+Let \(n>1\) be an odd integer. Prove that there exist positive integers \(x\) and \(y\) such that
+\[
+\frac{4}{n}=\frac{1}{x}+\frac{1}{y}
+\]
+if and only if \(n\) has a prime factor of the form \(4 k-1 .\)
+\end{problem}
+\begin{problem}
+Find all positive integers \(m, n\), where \(n\) is odd, that satisfy
+\[
+\frac{1}{m}+\frac{4}{n} \quad \frac{1}{12}
+\]
+\end{problem}
+\begin{problem}
+Find all \(m,p,q\) with \(2^mp^2 + 1 = q^7\), where \(m\in\NN\) and \(p,q\) are primes.
+\end{problem}
+\begin{problem}
+Find all integers \(n\) for which the equalion
+\[
+x^{3}+y^{3}+z^{3}-3 x y z=n
+\]
+is solvable in posilive inlegers.
+\end{problem}
+\begin{problem}
+Find all triples \((x, y, p)\), where \(x\) and \(y\) are positive integers
+and \(p\) is a prime, satisfying the equation
+\[
+x^{5}+x^{4}+1=p^{y}
+\]
+\end{problem}
+\begin{problem}
+Determine all triples \((x, y, z)\) of positive integers such that
+\[
+(x+y)^{2}+3 x+y+1=z^{2} \text { . }
+\]
+\end{problem}
+\begin{problem}
+Determine all pairs \((x, y)\) of integers that satisfy the equation
+\[
+(x+1)^{4}-(x-1)^{4}=y^{3} \text { . }
+\]
+\end{problem}
+% \begin{problem}
+% Let \(a\) and \(b\) be positive integers such that \(a b+1\) divides \(a^{2}+b^{2}\).
+% Prove that \(\frac{a^{2}+b^{2}}{a b+1}\) is the square of an integer.
+% \end{problem}
+\begin{problem}
+Find the maximal value of \(m^{2}+n^{2}\) if \(m\) and \(n\) are integers between 1 and 1981 satisfying \(\left(n^{2}-m n-m^{2}\right)^{2}=1\).
+\end{problem}
+\begin{problem}
+Find all integers \(x, y, z\) satisfying
+\[
+x^{2}+y^{2}+z^{2}-2 x y z=0 .
+\]
+\end{problem}
+\begin{problem}
+Solve the following equation in integers \(x, y, z, u\) :
+\[
+x^{4}+y^{4}+z^{4}=9 u^{4} \text { . }
+\]
+\end{problem}
+\begin{problem}
+Solve the following equation in positive integers:
+\[
+x^{2}-y^{2}=2 x y z
+\]
+\end{problem}
+\begin{problem}
+Prove that there are no integer solutions (x, y) to \(y^2=x^3+23\).
+\end{problem}
+\begin{problem}
+Determine all integral solutions to the equation
+\[
+a^{2}+b^{2}+c^{2}=a^{2} b^{2} .
+\]
+\end{problem}
+\begin{problem}
+Find all pairs \((p, q)\) of prime numbers such that
+\[
+p^{3}-q^{5}=(p+q)^{2} .
+\]
+\end{problem}
+\begin{problem}
+Prove that if \(n\) is a positive integer such that the
+equation
+\[
+x^{3}-3 x y^{2}+y^{3}=n
+\]
+has a solulion in inlegers \(x, y\), then il has at leasl three such solu-
+tions. Prove thal the equalion has no integer solution when \(n=2891 .\)
+\end{problem}
+\begin{problem}
+Find all triples \((x, y, z)\) of nonnegative integers such that
+\[
+5^{x} 7^{y}+4=3^{z}
+\]
+\end{problem}
+\begin{problem}
+Solve in positive integers: \(n^7+7=k^2\)
+\end{problem}
+\begin{problem}
+Determine all pairs $(x, y)$ of integers such that
+\[1+2^{x}+2^{2x+1}= y^{2}.\]
+\end{problem}
+\begin{problem}
+Find all pairs $(k,n)$ of positive integers such that \[ k!=(2^n-1)(2^n-2)(2^n-4)\cdots(2^n-2^{n-1}). \]
+\end{problem}
+\begin{problem}
+Find all triples $(a, b, c)$ of positive integers such that $a^3 + b^3 + c^3 = (abc)^2$.
+\end{problem}
+\begin{problem}
+Find all pairs $(m,n)$ of nonnegative integers for which \[m^2 + 2 \cdot 3^n = m\left(2^{n+1} - 1\right).\]
+\end{problem}
+\begin{problem}
+Find all integer solutions of the equation \[\frac{x^{7}-1}{x-1}=y^{5}-1\]
+\end{problem}
+\end{document}
