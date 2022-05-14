@@ -1,0 +1,298 @@
+\documentclass[11pt]{scrartcl}
+\usepackage{atonu}
+\usepackage{fullpage}
+\usepackage{amsmath,amsthm, amsfonts}
+\begin{document}
+\title{Sequences and Recursion}
+\subtitle{EGMO Camp 2022}
+\author{\scshape{Atonu Roy Chowdhury} \\
+\mailto{atonuroychowdhury@gmail.com}}
+\date{\today}
+\maketitle
+
+\section{Recurrence Relation}
+We all know that a sequence is an ordered list of numbers. When a term of a sequence is defined as some relation of the previous terms, we call that relation a recurrence relation. For instance, the Fibonacci sequence
+\[ 0,1,1,2,3,5,8,13,21,34, 55, \ldots \]
+is a recursive sequence. In this case, the recurrence relation is that every term is the sum of the previous two terms. In other words, if \(F_n\) is the \(n\)-th Fibonacci number, then
+\[ F_n = F_{n-1} + F_{n-2} \, . \]
+Note that there are infinitely many sequences that satisfy this relation. That's why the initial values \(F_0 = 0\) and \(F_1 = 1\) are important. We often use the term \textbf{order} of a recurrsive relation, that basically tells you how far you need to look back in order to compute the next term. In this scenario, the order is \(2\), because we need to look at the previous two terms to find out \(F_{n}\). It should be evident to you that if a recursive sequence has order \(m\), then you need the first \(m\) terms to find the whole sequence.
+\begin{defn}[Linear Recurrence Relation]
+Suppose \(\left\{a_n\right\}_{n=0}^{\infty}\) is a sequence. We call it a linear recursive sequence if \(a_n\) can be written as follows:
+\[ a_n = c_1a_{n-1} + c_2 a_{n-2} + \cdots + c_k a_{n-k} + b_n \, .\]
+Note that, \(c_i\) and \(b_n\) might be functions of \(n\). If \(b_n = 0\) we call it a homogenous linear recurrence. We call this recurrence to have constant coefficients if all the \(c_i\)'s are constant.
+\end{defn}
+At first we are gonna solve the simplest kind of linear recurrences: homogenous linear recurrence with constant coefficients. The simplest of such recurrences is:
+\[ a_n = r a_{n-1} \, . \]
+You might recognize this as the recursive relation of a geometric sequence. The general solution is given by
+\[ a_n = a_0 r^n \, . \]
+This example might seem trivial, but it's important nonetheless because the solution of every recurrence relation can be expressed as a linear combination of some geometric sequences. Now let's look at a slightly more complicated recursive relation.
+\[ a_n = c_1 a_{n-1} + c_2 a_{n-2} \, . \]
+If \(a_n = C r^n\) is to be a solution of this recurrence relation, then \(r\) has to satisfy the following equation.
+\[ C r^n = c_1 C r^{n-1} + c_2 C r^{n-2} \, . \]
+Cancelling out stuffs, we get
+\[ r^2 - c_1 r - c_2 = 0 \, . \]
+So \(r\) has to be a root of the polynomial
+\[ x^2 - c_1 x - c_2 \, . \]
+This polynomial is called the \textbf{characteristic polynomial} of the recurrence relation. If \(r_1\) and \(r_2\) are two (distinct) roots of the characteristic polynomial, then the general solution of the recurrence is given by
+\[a_n = C r_1^n +  D r_2^n \, . \]
+The values of \(C\) and \(D\) are to be obtained using the initial conditions, \textit{i.e.} the value of \(a_0\) and \(a_1\).
+
+In a similar fashion, one can solve a homogenous linear recurrence with constant coefficients of any finite order.
+\begin{exercise}
+Find a general expression for the Fibonacci sequence.
+\end{exercise}
+\begin{soln}
+The recurrence relation is \(F_n = F_{n-1} + F_{n-2}\). So the characteristic polynnomial is \(x^2 -x-1\). The roots of this polynomial are
+\[ r_1 = \frac{1 + \sqrt{5}}{2} \ \text{ and } \ r_2 = \frac{1 - \sqrt{5}}{2} \, .\]
+Therefore, the general expression for Fibonacci numbers is
+\[ F_n = C \left(\frac{1 + \sqrt{5}}{2} \right)^n + D \left(\frac{1 -\sqrt{5}}{2} \right) ^n \, .\]
+Now, using \(F_0 = 0\) anf \(F_1 = 1\), we find that
+\[ 0 = C+D \ \text{ and } \ 1 = C \left(\frac{1 + \sqrt{5}}{2} \right)^1 + D \left(\frac{1 -\sqrt{5}}{2} \right) ^1 \, . \]
+Now we have two simultaneous linear equation for two variables. Solving for \(C\) and \(D\), we get
+\[ F_n = \frac{1}{\sqrt 5} \left( \left(\frac{1 + \sqrt{5}}{2} \right)^n - \left(\frac{1 -\sqrt{5}}{2} \right) ^n \right)   \, . \]
+\end{soln}
+\begin{exercise}[USAJMO 2018]
+For each positive integer $n$, find the number of $n$-digit positive integers that satisfy both of the following conditions:
+\begin{itemize}
+\item no two consecutive digits are equal, and
+\item the last digit is a prime.
+\end{itemize}
+\end{exercise}
+\begin{soln}
+Let \(a_n\) be the number of \(n\)-digit positive integers with the given property. One can easily find \(a_n\) for small values of \(n\). For instance, \(a_1=4\) and \(a_2 = 32\) (left as an exercise for the reader).
+
+Now we are going to find out a recurrence relation for \(a_n\). Let \(X\) be a \(n\)-digit number with the given properties. If the second digit (from left) of \(X\) is nonzero, \(X\) can be constructed from a \(\left(n-1\right) \)-digit number with the same properties. In this case, we have \(9-1=8\) options for the first digit.
+
+On the other hand, if the second digit of \(X\) is \(0\), then \(X\) can be constructed from a \(\left(n-2\right) \)-digit number with the given properties by adding another nonzero digit as the first digit. In this case, we have \(9\) options for the first digit. Therefore,
+\[ a_n = 8a_{n-1} + 9 a_{n-2} \, . \]
+The characteristic polynomial of this recursive relation is \(x^2 -8x-9\). The roots are \(9\) and \(-1\). Therefore,
+\[ a_n = A 9^n + B \left(-1\right) ^n \, . \]
+By using \(a_1 = 4\) and \(a_2 = 32\), we can find the values of \(A\) and \(B\).
+\[ 9A-B = 4 \ \text{ and } \ 81A + B = 32 \implies A = \frac{2}{5} \ , \ B = - \frac{2}{5} \, . \]
+Therefore, \(a_n = \frac{2}{5} \left(9^n - \left(-1\right) ^n\right) \).
+\end{soln}
+In a similar manner, we can compute higher order homogenous linear recurrences that have constant coefficients. For instance, if
+\[ a_n = c_1a_{n-1} + c_2 a_{n-2} + \cdots + c_k a_{n-k} \, , \]
+then the characteristic polynomial of this recursive relation would be
+\[ x^k - c_1 x^{k-1} - c_2 x^{k-2} - \cdots - c_k \, . \]
+If \(r_1, r_2, \ldots, r_k\) are the \textbf{distinct} roots of this polynomial, then
+\[ a_n = d_1 r_1 ^n + d_2 r_2^n + \cdots + r_k ^n \, . \]
+The values of \(d_i\) are to be determined using the initial conditions.
+
+\vspace{3mm}
+
+Now, what do we do when the roots of the characteristic polynomial are not distinct? If \(r_1 = r_2\) and the rest are distinct, then we will have
+\[ a_n = d_1 r_1 ^n + d_2\, n r_2^n + d_3 r_3^n \cdots + r_k ^n \, . \]
+In the same way, if \(r_1\) is repeated \(3\) times, then the answer would be
+\[ a_n = d_1 r_1 ^n + d_2\, nr_1 ^n + d_3 \, n^2 r_1^n+ d_4r_4^n+ \cdots + r_k ^n \, . \]
+This is how we deal with repeated roots.
+
+\vspace{3mm}
+
+Now we shall learn what to do if the recurrence is not homogenous. Basically we need to make it homogenous. Consider the non-homogenous recursive relation
+\[ a_n = c_1a_{n-1} + c_2 a_{n-2} + \cdots + c_k a_{n-k} + c_0 \, ,\]
+where \(c_0\) is a constant. For \(n-1\), the equation would look like
+\[ a_{n-1} = c_1a_{n-2} + c_2 a_{n-3} + \cdots + c_k a_{n-k-2} + c_0 \, .\]
+If we subtract one from the other, then we get rid of the constant \(c_0\). Let's see a few examples.
+\begin{exercise}
+\(x_0 = 5, x_1 = 9 , x_2 = 43\) and for every \(n \ge 3\), \(x_n = 3x_{n-1} - 4 x_{n-3}\). Find \(x_n\).
+\end{exercise}
+\begin{soln}
+The characteristic polynomial of this recurrence is \(x^3 - 3x^2 + 4 = \left(x+1\right) \left(x-2\right) ^2\). Therefore,
+\[ x_n  =  c_1 \left(-1\right) ^n + c_2 2^n  + c_3 n 2^n \, . \]
+Using the initial conditions, we can find \(c_1, c_2, c_3\). We get that \(c_1 = 3\), \(c_2 = 2\) and \(c_3 = 4\). Hence,
+\[ x_n  =  3\left(-1\right) ^n + 2^{n+1}  + n 2^{n+2} \, . \]
+\end{soln}
+\begin{exercise}
+Find the general solution to the recurrence \(a_n = a_{n-1} + 2a_{n-2} + n\).
+\end{exercise}
+\begin{soln}
+Substituting \(n-1\), we get
+\[ a_{n-1} = a_{n-2} + 2a_{n-3} + n -1 \, .\]
+Subtracting this from the original recurrence, we get
+\[ a_n - a_{n-1} = a_{n-1} + 2a_{n-2} - a_{n-2} - 2a_{n-3} + 1 \implies a_n = 2 a_{n-1} + a_{n-2} - 2a_{n-3} + 1 \, .  \]
+Now, substituting \(n-1\) in this new recurrence relation,
+\[ a_{n-1} = 2 a_{n-2} + a_{n-3} - 2a_{n-4} + 1 \, .\]
+Then again we subtract to get rid of the constant \(1\).
+\[ a_n = 3 a_{n-1} - a_{n-2} - 3a_{n-3} + 2 a_{n-4} \, .  \]
+The characteristic polynomial of this recurrence relation is \(x^4 - 3x^3 + x^2 + 3x -2\). The roots of this polynomial are \(2, 1,1, -1\).
+\[ a_n = c_1 2^n + c_2 \left(-1\right) ^n + c_3 + c_4 n \, . \]
+For this to satisfy the given recurrence \(a_n = a_{n-1} + 2a_{n-2} + n\), we must have \(c_3 = - \frac{5}{4}\) and \(c_4 = -\frac{1}{2}\) (verify this). Therefore, the general solution is
+\[ a_n = c_1 2^n + c_2 \left(-1\right) ^n - \frac{n}{2} - \frac{5}{4}   \, . \]
+\end{soln}
+\begin{exercise}
+For which values of \(x_0\), the sequence defined by \(x_{n+1} = 2^n - 3x_n\) is strictly increasing?
+\end{exercise}
+\begin{soln}
+Note that this is not exactly a linear recurrence. We have to get rid of the \(2^n\) term somehow. The trick to do it is looking at two consecutive terms
+\[ x_{n+1} = 2^n - 3x_n \ \text{ and } \ x_{n} = 2^{n-1} - 3x_{n-1} \ , \]
+and multiplying the second one by \(2\) and subtracting it from the first one. Therefore,
+\[ x_{n+1} - 2x_{n} = 2^n - 3x_n - 2^{n} + 6x_{n-1} \implies x_{n+1} = -x_n+6x_{n-1} \, . \]
+This is of our favorite form. We know how to solve it. The characteristic polynomial is \(x^2 + x -6\), the roots of which are \(2\) and \(-3\). Therefore,
+\[ x_n = c_1 2^n + c_2  \left(-3\right) ^n \, .\]
+Using \(x_1 = 1- 3x_0\), we express \(c_1\) and \(c_2\) in terms of \(x_0\).
+\[ c_1+c_2 = x_0 \ \text{ and } \ 2c_1 - 3c_2 = x_1 =  1- 3x_0 \, . \]
+Solving for \(c_1\) and \(c_2\), we get \(c_1 = \frac{1}{5}\) and \(c_2 = x_0 - \frac{1}{5}\). Therefore,
+\[ x_n =  \frac{2^n}{5} +  \left(x_0 - \frac{1}{5}\right)  \left(-3\right) ^n \, . \]
+For large enough values of \(n\), \(\left(-3\right)^n\) grows faster in magnitude than \(2^n\). But \(\left(-3\right) ^n\) alternates signs. So the sequence \(x_n\) will alternate in sign for large enough values of \(n\). So, the sequence \(x_n\) is not increasing except for the case when the coefficient of \(\left(-3\right) ^n\) is \(0\). Therefore,
+\[ x_0 - \frac{1}{5} = 0\implies x_0 = \frac{1}{5} \, .\]
+\end{soln}
+\section{Finding Recurrence From The Solution}
+So far we have solved linear recurrences. Now we are going to do the reverse job. If we are given the solution to a recurrence relation, we will be finding the recusive relation that solves to the given solution. This is often a very useful tool in solving problems.
+\begin{exercise}
+Let \(a_n = \left(n+2^n \right) F_n \), where \(F_n\) is the \(n\)-th Fibonacci number. Then find the recursive relation for \(a_n\).
+\end{exercise}
+\begin{soln}
+We computed the general formula for Fibonacci numbers before.
+\[ F_n = \frac{\alpha^n - \beta^n}{\alpha - \beta} \ , \ \text{ where } \alpha = \frac{1+\sqrt 5}{2} \, , \beta = \frac{1-\sqrt 5}{2}\, . \]
+Using this, we can express \(a_n\) as
+\begin{equation*}
+\begin{split}
+a_n &= \left(n+2^n \right) F_n = \left(n+2^n \right) \frac{\alpha^n - \beta^n}{\alpha - \beta} \\
+&= \frac{1}{\alpha - \beta} n \alpha^n - \frac{1}{\alpha - \beta} n \beta^n + \frac{1}{\alpha - \beta} \left(2\alpha\right) ^n - \frac{1}{\alpha - \beta} \left(2\beta\right) ^n
+\end{split}
+\end{equation*}
+Therefore, the characteristic polynomial has \(\alpha\) and \(\beta\) as repeated roots, and \(2\alpha, 2 \beta\) are non-repeated roots. Therefore, the characteristic polynomial is
+\begin{equation*}
+\begin{split}
+\left(x-\alpha\right)^2 \left(x-\beta\right) ^2 \left(x-2 \alpha\right) \left(x- 2 \beta\right) &= \left(x^2 -x-1\right) ^2 \left(x^2 - 2 \left(\alpha+ \beta\right)x + 4 \alpha\beta\right) \\
+&=x^6 - 4x^5 - x^4 + 12x^3 + x^2 - 10x + 4
+\end{split}
+\end{equation*}
+Therefore, the recurrence relation is \(a_n = 4a_{n-1} + a_{n-2} - 12 a_{n-3} - a_{n-4} + 10 a_{n-5} - 4a_{n-6}\).
+\end{soln}
+\begin{exercise}
+Prove that \(F_n - 2n3^n\) is divisible by \(5\) for every \(n \ge 0\).
+\end{exercise}
+\begin{soln}
+We basically need to show that \(F_n \equiv 2n 3^n \amod{5}\) for every \(n \ge 0\). The key to do it is to show that the sequences \(a_n = 2n 3^n\) and \(F_n\) have the same recursive relation in mod \(5\), and the first few terms are same in mod \(5\).
+
+The characteristic polynomial of \(a_n\) has \(3\) as repeated root. In fact it repeats twice. So the characteristic polynomial would be \(\left(x-3\right) ^2 = x^2 -6x +9\). Therefore, the recursive relation is
+\[ a_n = 6a_{n-1} - 9 a_{n-2} \equiv a_{n-1} + a_{n-2} \amod 5 \, . \]
+We already know that \(F_n = F_{n-1}+ F_{n-2}\). So the recursive relations do agree. Since the order of the recursion is \(2\), we need to verify that the first \(2\) terms of \(a_n\) and \(F_n\) agree in mod \(5\).
+\[ F_0 = 0 \ , \ a_0 = 0 \ ; \ F_1 = 1 \ , \ a_1 = 2 \times 3 = 6 \equiv 1 \amod 5 \, . \]
+Therefore, \(F_n \equiv a_n \amod 5\) for every \(n \ge 0\).
+\end{soln}
+\begin{exercise}
+If \(x+y+z = 0\), show that
+\[ \frac{x^2 + y^2 + z^2}{2} \cdot \frac{x^3 + y^3 + z^3}{3} = \frac{x^5 + y^5 + z^5}{5} \, . \]
+\end{exercise}
+\begin{soln}
+Although this seems to be an algebraic problem, we are going to approach it using recursive methods. Let \(a_n = x^n + y^n + z^n\). Then \(x,y,z\) are the roots of the characteristic polynomial. Therefore, the characteristic polynomial is
+\[ \left(tx\right) \left(t-y\right) \left(t-z\right) = t^3 - t^2 \left(x+y+z\right) + t \left(xy+yz+zx\right) - xyz = t^3+At-B \, , \]
+where \(A =xy+yz+zx \) and \(B=xyz\). Therefore, the recursive relation is
+\[ a_n = -A a_{n-2} + Ba_{n-3} \, . \]
+We need to show that \(\frac{a_2}{2}\cdot \frac{a_3}{3} = \frac{a_5}{5}\).
+\[ a_2 = x^2 + y^2 + z^2 = \left(x+y+z\right) ^2 - 2 \left(xy+yz+zx\right) = -2A \, . \]
+\[ a_3 = -A a_{1} + Ba_{0} = 3B \, . \]
+\[ a_5 = -A a_{3} + Ba_{2} = - 3AB - 2AB = -5AB \, . \]
+Now \(\frac{a_2}{2}\cdot \frac{a_3}{3} = \frac{a_5}{5}\) follows trivially.
+\end{soln}
+Also, show in a similar fashion that \(\frac{a_2}{2}\cdot \frac{a_5}{5} = \frac{a_7}{7}\).
+\section{Miscellaneous Problem Solving}
+\begin{exercise}
+Let \(a_1 = 1\) and for every \(n \ge 1\),
+\[ a_{n+1} = \frac{1+4a_n+ \sqrt{1+24a_n}}{16} \, . \]
+Show that \(a_n\) is rational for every \(n\).
+\end{exercise}
+\begin{soln}
+Here the only part that might stop it from being rational is the thing under square root sign. If we can prove that \(b_n = \sqrt{1+24a_n}\) is rational for every \(n\), then we are done.
+\[b_n = \sqrt{1+24a_n} \implies a_n = \frac{b_n^2 -1}{24}\, .\]
+We can use this and try to get a recursion for \(b_n\).
+\begin{equation*}
+\begin{split}
+&\frac{b_{n+1}^2 -1}{24} = a_{n+1} = \frac{1+4a_n+ \sqrt{1+24a_n}}{16} = \frac{1+\frac{b_n^2 -1}{6}+ b_n}{16} = \frac{b_n^2+6b_n+5}{96} \\
+\implies \ & {b_{n+1}^2} = 1+ \frac{b_n^2+6b_n+5}{4} = \frac{b_n^2+6b_n+9}{4} = \left(\frac{b_n+3}{2}\right) ^2
+\end{split}
+\end{equation*}
+\(b_n\) is always positive since it's the square root of some positive real number. Therefore,
+\[ b_{n+1} = \frac{b_n+3}{2} \, .\]
+Since \(b_1 = \sqrt{1+24} = 5\) is rational, we can conclude that \(b_n\) is rational for every \(n\). Therefore, \(a_n\) is rational.
+\end{soln}
+\begin{exercise}
+Given a positive integer \(n\), consider a sequence of real numbers \(a_{0}, a_{1}, \ldots, a_{n}\) defined as \(a_{0}=\frac{1}{2}\) and \(a_{k}=a_{k-1}+\frac{a_{k-1}^{2}}{n}\) for \(1 \leq k \leq n\). Prove that \(1-\frac{1}{n}<a_{n}<1\).
+\end{exercise}
+\begin{soln}
+If we expand \(a_{k}=a_{k-1}+\frac{a_{k-1}^{2}}{n}\), we get
+\[
+n a_{k}= na_{k-1}+a_{k-1}^2 =a_{k-1}\left(n+a_{k-1}\right) \implies  \frac{a_{k}}{a_{k-1}}=\frac{n+a_{k-1}}{n} \, .
+\]
+If we divide both sides by \(a_{k} a_{k-1}\), we get
+\[
+\frac{1}{a_{k-1}}=\frac{1}{a_{k}}+\frac{a_{k-1}}{a_{k}} \cdot \frac{1}{n} = \frac{1}{a_{k}} + \frac{1}{n+a_{k}}
+\implies \frac{1}{a_{k-1}}-\frac{1}{a_{k}}=\frac{1}{n+a_{k}} \, .
+\]
+This gives us a nice telescoping sum. If we add this for \(k=1,2, \ldots, n\) we get:
+\[
+\frac{1}{a_{0}}-\frac{1}{a_{n}}=\sum_{k=1}^{n} \frac{1}{n+a_{k}} \implies \frac{1}{a_{n}}=2-\sum_{k=1}^{n} \frac{1}{n+a_{k}} \, .
+\]
+Now,
+\begin{equation*}
+\begin{split}
+1- \frac{1}{n} < a_n < 1 &\iff \frac{n}{n-1} > \frac{1}{a_n} > 1 \iff \frac{n}{n-1} > 2-\sum_{k=1}^{n} \frac{1}{n+a_{k}} > 1 \\
+&\iff 2-\frac{n}{n-1} <\sum_{k=1}^{n} \frac{1}{n+a_{k}} <2- 1 \\
+&\iff \frac{n-2}{n-1}<\sum_{k=1}^{n} \frac{1}{n+a_{k}}<1 \, .
+\end{split}
+\end{equation*}
+So it suffices to show that \(\frac{n-2}{n-1}<\sum_{k=1}^{n} \frac{1}{n+a_{k}}<1\).
+
+If \(a_{k-1}\) is positive, then so is \(a_k\). Since \(a_0\) is positive, all the \(a_i\)'s are positive. Therefore, \(n+a_{k} > n\), and consequently, \(\frac{1}{n+a_{k}} < \frac{1}{n}\). Hence, the second inequality is satisfied.
+
+To prove the first inequality, we shall use the inequality we just proved \(a_n < 1\).
+\[ a_k < 1 \implies n+ a_k < n+1 \implies \frac{1}{n+a_k} > \frac{1}{n+1} \implies  \sum_{k=1}^{n} \frac{1}{n+a_{k}} > \frac{n}{n+1} > \frac{n-2}{n-1} \, . \]
+So we are done.
+\end{soln}
+\section{Practice Problems}
+\begin{problem}
+\begin{enumerate}[(a)]
+    \item Determine the number of ternary sequences of length \(n\) that contain the subsequence \(00\).
+    \item How many ternary sequences have no 1 anywhere to the right of a \(0\)?
+\end{enumerate}
+\end{problem}
+\begin{problem}
+Show that \(F_{n+1}^{3}+F_{n}^{3}-F_{n-1}^{3}=F_{3 n}\) for all \(n \geq 1\).
+\end{problem}
+\begin{problem}
+For \(n \geq 1\), define \(a_{n}\) to be the number of sequences of \(n 0 \mathbf{s}, 1 \mathbf{s}\), and \(2 \mathbf{s}\) such that no three consecutive numbers in the sequence are all different. Find a formula for \(a_{n}\), and show that if \(p \geq 3\) is a prime, then \(a_{p} \equiv 3 \amod p\).
+\end{problem}
+\begin{problem}
+Let \(\left(x_n\right) \) be a sequence such that \(x_0 = x_1 = 5\) and
+\[x_n = \frac{x_{n-1} + x_{n+1}}{98}\]
+for all positive integers \(n\). Prove that \(\frac{x_{n}+1}{6}\) is a perfect square for all \(n\).
+\end{problem}
+\begin{problem}[Canada 1982]
+Let \(a\), \(b\), and \(c\) be the roots of the equation \(x^{3}-x^{2}-x-1=0\). Show that \(a, b\), and \(c\) are distinct, and that
+\[
+\frac{a^{1982}-b^{1982}}{a-b}+\frac{b^{1982}-c^{1982}}{b-c}+\frac{c^{1982}-a^{1982}}{c-a}
+\]
+is an integer.
+\end{problem}
+\begin{problem}[Putnam 1976]
+Let \(P(x, y)=x^{2} y+x y^{2}\) and \(Q(x, y)=x^{2}+x y+y^{2}\). For \(n=1,2,3, \ldots\), let \(F_{n}(x, y)=\) \((x+y)^{n}-x^{n}-y^{n}\) and \(G_{n}(x, y)=(x+y)^{n}+x^{n}+y^{n}\).
+One observes that \(G_{2}=2 Q, F_{3}=3 P, G_{4}=2 Q^{2}\), \(F_{5}=5 P Q, G_{6}=2 Q^{3}+3 P^{2}\). Prove that, in fact, for each \(n\) either \(F_{n}\) or \(G_{n}\) is expressible as a polynomial in \(P\) and \(Q\) with integer coefficients.
+\end{problem}
+\begin{problem}[Putnam 1980]
+For which real numbers \(a\) does the sequence defined by the initial condition \(u_{0}=a\) and the recursion \(u_{n+1}=2 u_{n}-n^{2}\) have \(u_{n}>0\) for all \(n \geq 0\)?
+\end{problem}
+\begin{problem}
+Let \(a_{1}, a_{2}, a_{3}, \ldots\) be a sequence of positive numbers. Prove that there exists infinitely many \(n\) such that \(1+a_{n}>2^{1 / n}\, a_{n-1}\).
+\end{problem}
+\begin{problem}[ISL 1988]
+An integer sequence is defined by \(a_{0}=0, a_{1}=1\), and \(a_{n}=2 a_{n-1}+a_{n-2}\) for all \(n \geq 2\). Prove that \(2^{k}\) divides \(a_{n}\) if and only if \(2^{k}\) divides \(n\).
+\end{problem}
+\begin{problem}[EGMO 2020]
+The positive integers $a_0, a_1, a_2, \ldots, a_{3030}$ satisfy$$2a_{n + 2} = a_{n + 1} + 4a_n \text{ for } n = 0, 1, 2, \ldots, 3028.$$
+Prove that at least one of the numbers $a_0, a_1, a_2, \ldots, a_{3030}$ is divisible by $2^{2020}$.
+\end{problem}
+\begin{problem}[USAMO 1982]
+Let \(a_n = x^n + y^n + z^n\) with \(a_1 = 0\). Find all pairs of positive integers \(\left(m,n\right) \) such that
+\[ \frac{a_n}{n}\cdot \frac{a_m}{m} = \frac{a_{m+n}}{m+n}\, . \]
+\end{problem}
+\begin{problem}[EGMO 2020]
+Let $m > 1$ be an integer. A sequence $a_1, a_2, a_3, \ldots$ is defined by $a_1 = a_2 = 1$, $a_3 = 4$, and for all $n \ge 4$,$$a_n = m(a_{n - 1} + a_{n - 2}) - a_{n - 3}.$$
+Determine all integers $m$ such that every term of the sequence is a square.
+\end{problem}
+
+
+
+\end{document}
