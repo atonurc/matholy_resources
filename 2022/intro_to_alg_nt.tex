@@ -1,0 +1,405 @@
+\documentclass[11pt]{scrartcl}
+\usepackage{atonu}
+\usepackage{fullpage}
+\usepackage{amsmath,amsthm, amsfonts}
+\begin{document}
+\title{Introduction to Algebraic Number Theory}
+\subtitle{BdMO Special Camp 2022}
+\author{\scshape{Atonu Roy Chowdhury} \\
+\mailto{atonuroychowdhury@gmail.com}}
+\date{\today}
+\maketitle
+
+In this note, I shall assume that the reader is familiar with basic number theory as well as some intermediate concepts such as orders, primitive root, quadratic residue etc. Last year I prepared a note for those topics, which can be found in \url{https://atonurc.github.io/assets/ord_primroot.pdf}. No background in abstract algebra is needed. However, I presume the readers are familiar with the basic definitions of groups.
+
+\section{Rings and Fields}
+Rings are sets where you can add two elements and multiply two elements. You can think of rings as generalization of \(\ZZ\). In \(\ZZ\) you can add, subtract, multiply two numbers, but not divide. Let's dive into the formal definition of ring.
+\begin{defn}[Ring]
+A \textbf{ring} is a nonempty set \(R\) equipped with two binary operations \(+\) (addition) and \(\cdot\) (multiplication) such that the following properties hold:
+\begin{enumerate}[(i)]
+    \item \(a+b \in R\) for every \(a,b \in R\).
+    \item \((a+b)+c = a+(b+c)\) for every \(a,b,c \in R\).
+    \item \(a+b = b+a\) for every \(a,b \in R\).
+    \item There is an element \(0 \in R\) (additive identity) such that \(0+a = a\) for every \(a\in R\).
+    \item For every \(a \in R\), there exists an element \(-a \in R\) such that \(a+(-a) = 0\).
+    \item \(a \cdot b \in R\) for every \(a,b \in R\).
+    \item \((a\cdot b)\cdot c = a\cdot (b\cdot c)\) for every \(a,b,c \in R\).
+    \item There is an element \(1 \in R\) (multiplicative identity) such that \(1 \cdot a = a \cdot 1 = a\) for every \(a \in R\).
+    \item Multiplication is distributive over addition, i.e., for every \(a,b,c\in R\),
+    \[ (a+b) \cdot c = a \cdot c + b \cdot c \ \text{ and } \ a \cdot \left(b + c\right) = a \cdot b + a \cdot c \,.  \]
+\end{enumerate}
+\end{defn}
+If a ring does not contain \(1\), it is called \textbf{rng} -- ring without \textit{\textbf{i}}dentity. A ring where multiplication is commutative, i.e. \(a \cdot b = b \cdot a\) for every \(a,b \in R\), is called a commutative ring. In this note, a ring is always commutative unless stated otherwise. Also, we shall drop the \(\cdot\) and simply write \(ab\) instead of \(a \cdot b\).
+
+Examples of rings are all over us. \(\ZZ\), \(\QQ\), \(\RR\), \(\CC\) are all rings under the usual addition and multiplication. Integers modulo \(n\), \(\ZZ / n\ZZ\) is also a ring. It's often written as \(\ZZ_n\). The set \(\ZZ [x]\) of all polynomials over integers (polynomials whose coefficients are in \(\ZZ\)) is also a ring. In fact, if \(R\) is a ring, then the set \(R[x]\) of all polynomials over \(R\) is a ring, where addition and multiplication are defined in the usual way. A non-example is \(\NN\) under the usual addition and multiplication. Because the additive inverses of positive integers are not in \(\NN\)\footnote{I think I should clarify. In this note I shall use the convention that \(0 \in \NN\).}.
+
+\begin{defn}
+An nonzero element \(a \in R\) is called a \textbf{zero divisor} if there exists another nonzero element \(b \in R\) such that \(a b = 0\). A ring \(R\) is called \textbf{integral domain} if it does not contain any zero divisor. In other words, \(ab = 0\) implies that at least one of \(a\) and \(b\) are \(0\).
+\end{defn}
+If \(n\) is not a prime number, then \(\ZZ_n\) is not an integral domain. Because if \(n = ab\) for \(a,b > 1\), then \(a b = 0\) in \(\ZZ_n\) and \(a \ne 0\), \(b \ne 0\).
+\begin{defn}
+A nonzero element \(a \in R\) is said to be a \textbf{unit} if it has a multiplicative inverse. In other words, there exists \(b \in R\) such that \(ab=1\). A ring where all nonzero elements are units is called a \textbf{field}.
+\end{defn}
+The reason why we require all the nonzero elements to be units instead of all elements is that \(0\) can never have a multiplicative inverse. Because \(0 \cdot a = 0\) for every \(a \in R\).
+\[ 0 \cdot a = \left(0 + 0\right) \cdot a = 0 \cdot a + 0 \cdot a \implies 0 \cdot a = 0 \,. \]
+\(\QQ\), \(\RR\), \(\CC\) are all fields. But \(\ZZ\) is not. Neither is \(\QQ [x]\) or \(\RR [x]\) or \(\CC [x]\). One can easily verify that the set of Gaussian integers
+\[ \ZZ \left[i\right] = \left\{a + bi \ | \ a,b \in \ZZ\right\}  \]
+is also not a field. But it has more structres than a ring, which we shall see later.
+
+\section{Applications in Solving Diophantine Equations}
+First, we shall see an elementary example.
+\begin{exercise}
+Find all pairs of integers \(\left(x,y\right) \) such that \(x^3 = y^2 - 4\).
+\end{exercise}
+\begin{soln}
+The case \(y\) is even is left as an exercise for the reader. In that case, the only solutions are \(\left(0, \pm 2\right) \). Now we shall solve for odd \(y\). If we factorize the LHS, we obtain
+\[ x^3 = \left(y+2\right) \left(y-2\right) \,. \]
+Since \(y\) is even, \(\gcd\left(y+2 , y-2\right) =1 \). Therefore, both \(y+2\) and \(y-2\) must be perfect cubes.
+\[ y+2 = a^3 \ \text{ and } \ y-2 = b^3 \,. \]
+But then we find that \(a^3 - b^3 = 4\). In particular, \(a-b \mid 4\). Then
+\[ \frac{4}{a-b} = a^2 + ab + b^2 = (a-b)^2+3ab  \]
+yields contradiction for each of the possibilities \(a-b = 1,2,4\). Therefore, there are no solutions when \(y\) is odd.
+\end{soln}
+Now, what sort of techniques were used in solving this diophantine equation? We used divisibility, primes, gcd etc. From \(x^3 =  \left(y+2\right) \left(y-2\right)  \), we deduced that both \(y+2\) and \(y-2\) are perfect cubes given that \(\gcd\left(y+2 , y-2\right) =1 \). What is the reasoning behind this?
+
+If \(p\) is a prime factor of \(x\), and %\(v_p \left(x\right) = \alpha\), then \(v_p \left(x^3\right) = 3\alpha\). +
+\(p^\alpha \Vert x\), then \(p^{3\alpha} \Vert x^3\). Since \(y+2\) and \(y-2\) are coprimes, \(p\) divides only one of those. Thus either \(p^{3\alpha} \Vert y+2\) or \(p^{3\alpha} \Vert y-2\). Notice that we implicitly used fundamental theorem of arithmetic here. That is, every integer has a unique factorization into primes. Now we shall try to use similar ideas in solving another diophantine equation.
+\begin{exercise}
+Find all pairs of integers \(\left(x,y\right) \) such that \(x^3 = y^2 +2\).
+\end{exercise}
+Firstly, note that \(y\) cannot be even. This is seen by taking mod \( 4\) on both sides. Hence, both \(x\) and \(y\) are odd. Now, can we factorize it like we did it for the previous example? Well, we cannot factorize it in our familiar realm of integers. We have to extend our \textit{umwelt}. %\footnote{Neuroscientist David Eagleman uses this German term to mean the world we can observe and perceive with our senses.}.
+That is, we have to involve complex numbers.
+\[ x^3 = y^2 +2 = \left(y + \sqrt 2 i\right) \left(y - \sqrt 2 i\right) \,. \]
+Then can we say that \(\gcd \left( y + \sqrt 2 i , y - \sqrt 2 i \right) =1 \) (whatever that means)? After that, as argued before, if \(p^{\alpha} \Vert x\) for a prime \(p\), then either \(p^{3\alpha}\Vert y + \sqrt 2 i\) or \(p^{3\alpha}\Vert y - \sqrt 2 i\). Then we can say that both \(y + \sqrt 2 i\) and \(y - \sqrt 2 i\) are perfect cubes.
+
+But does any of these make any sense? First of all, what does it mean for the gcd of two complex numbers? Then, what is a prime here? Also, what do we mean by perfect cube in this case? Clearly, the cube of no integer is \(y + \sqrt 2 i\) or \(y - \sqrt 2 i\). So what do we mean by all these nonsenses?
+
+As we said, we have to extend our familiar realm \(\ZZ\). We shall consider the ring \(\ZZ \left[\sqrt 2 i\right] \), which is the set of all numbers of the form \(a+ b \sqrt 2i\) with \(a,b \in \ZZ\).
+\[ \ZZ \left[\sqrt 2 i\right] = \left\{ a+ b \sqrt 2i \ | \ a,b\in \ZZ\right\} \,. \]
+Now we shall see if these complex numbers behave like integers. Firstly, %about gcd, one very common strategy of computing gcd is Euclidean algorithm. If \(a,b \)
+one important feature of integers is that you can perform Euclidean division on them. In other words, given \(a,b \in \ZZ\) with \(b \ne 0\), there exist \(q,r \in \ZZ\) such that
+% \(a=bq + r\) and \(0 \le r < \abs b\).
+\[ a=bq+r \text{ and } 0 \le r < \abs b \,. \]
+Can we imitate Euclidean division on \(\ZZ \left[\sqrt 2 i\right] \)? The elements of \(\ZZ \left[\sqrt 2 i\right] \) are complex numbers. Even if we can achieve \(a=bq+r\), how can we check whether \(0 \le r < \abs b\) holds or not? There are no order in \(\CC\), so it doesn't make any sense to talk about \(0 \le r\). Luckily, we don't have to deal with whole \(\CC\), so there is a way out. We shall consider the norm function
+\[ N \left(x+ y \sqrt 2i\right) = x^2 + 2y^2  \]
+and we imitate Euclidean division as follows: for every \(a,b \in \ZZ \left[\sqrt 2 i\right] \) and nonzero \(b\), there exist \(q,r \in \ZZ \left[\sqrt 2 i\right] \) such that
+\[ a=bq+r \text{ and } r=0 \text{ or } N \left(r\right) < N \left(b\right) \,. \]
+% We also want the norm function to be multiplicative.
+A ring where such a suitable norm function exists is called an \textbf{Euclidean Domain}, or ED in short. Now let's see the formal definition.
+\begin{defn}[Euclidean Domain]
+An integral domain \(R\) is called an \textbf{Euclidean Domain} if there exists an \textit{Euclidean function} \(N : R \setminus \left\{0\right\} \to \NN \) such that
+\begin{enumerate}[(i)]
+\item \(N \left(ab\right) \ge N \left(b\right) \) for all \(a,b \ne 0\).
+\item If \(a,b \in R\) with \(b \ne 0\), there exists \(q,r \in R\) such that \(a = bq+r\) and either \(r = 0\) or \(N \left(r\right) < N \left(b\right)\).
+\end{enumerate}
+\end{defn}
+According to this definition, \(\ZZ \left[\sqrt 2 i\right] \) is an ED. Verifying that the norm function has the desired properties is left as an exercise.
+
+Another very important property of integers is that of unique factorization into primes. But what even do we mean by primes in \(\ZZ \left[\sqrt 2 i\right] \)? Or in general rings?
+
+% \begin{defn}[Associates]
+% We say \(a,b\) are associates if \(a=bc\) for some unit \(c\). Equivalently, if \(a \mid b\) and \(b \mid a\).
+% \end{defn}
+\begin{defn}[Irreducible and Primes]
+We say \(a \in R\) is \textbf{irreducible} if \(a \ne 0\), \(a\) is not a unit, and if \(a=xy\), then \(x\) or \(y\) is a unit. We say \(p \in R\) is \textbf{prime} if \(p\) is nonzero, not a unit, and whenever \(p \mid xy\), either \(p \mid x\) or \(p \mid y\).
+\end{defn}
+
+Our usual definition of primes matches more with irreducibles than primes in a general ring. Don't you worry. Irreducible and prime actually mean the same thing when there is a notion of unique factorization. But we define such a ring in terms of unique factorization into irreducibles.
+
+\begin{defn}[Unique Factorization Domain]
+An integral domain \(R\) is a \textbf{Unique Factorization Domain} (UFD) if
+\begin{enumerate}[(i)]
+\item Every non-unit may be written as a product of irreducibles.
+\item If \(p_1p_2 \cdots p_n = q_1 q_2 \cdots q_m\) with \(p_i, q_j\) irreducibles, then \(n=m\) and we can rearrange them in such a way that \(p_i \mid q_i\) and \(q_i \mid p_i\).
+\end{enumerate}
+\end{defn}
+The condition \(p_i \mid q_i\) and \(q_i \mid p_i\) can be rephrased as \(p_i = u_i q_i\) for some unit \(u_i\). Because
+\[ p_i = c q_i \text{ and } q_i = d p_i \implies q_i = cd q_i \implies cd = 1 \,. \]
+Now we shall state a couple of theorems without proof.
+\begin{theorem}
+Suppose \(R\) is a UFD. Then \(p\in R\) is irreducible if and only if \(p\) is a prime.
+\end{theorem}
+\begin{theorem}
+If \(R\) is an ED, then \(R\) is a UFD.
+\end{theorem}
+Then we shall define gcd of two elements in the old-fashioned way.
+\begin{defn}[Greatest Common Divisor]
+\(\gcd \left(a,b\right) = d\) if \(d \mid a\), \(d \mid b\), and if any other \(d'\) divides both \(a\) and \(b\), \(d' \mid d\).
+\end{defn}
+Note that gcd of two numbers is not unique. If \(d\) satisfies the properties of gcd, then so does \(du\) for a unit \(u\). However, if both \(d_1\) and \(d_2\) are greatest common divisors, then we must have \(d_1 \mid d_2\) and \(d_2 \mid d_1\). Therefore, gcd is unique up to a factor of some unit.
+\begin{proposition}
+Let \(R\) be a unique factorization domain. Then \(\gcd \left(a,b\right) \) exists for all \(a,b\). %Furthermore, if both \(d\) and \(d'\) are greatest common divisor of \(a\) and \(b\), then we must have \(d \mid d'\) and \(d' \mid d\).
+\end{proposition}
+
+We have deviated a lot from our original problem. Let's get back to it. Let \(d\) be a gcd of \(y+ \sqrt{2}i\) and \(y - \sqrt{2}i\). Then \(d\) divides both of them, so \(d\) divides their difference \(2 \sqrt 2i\). Since our norm function is multiplicative,
+\[ N \left(d\right) \mid N \left(2 \sqrt 2i\right) = 8 \,. \]
+Therefore, \(N \left(d\right) \in \left\{1,2,4,8\right\} \). If \(N \left(d\right) \) is even, since \(d \mid y+ \sqrt 2i\),
+\[ 2 \mid N \left(d\right) \mid N \left(y+ \sqrt 2i\right) = y^2 + 2 \implies 2 \mid y \,. \]
+But we are considering \(y\) odd. Therefore, \(N \left(d\right) = 1\). So \(d\) must be \(1\) (or \(-1\)). So \(y + \sqrt 2i\) and \(y - \sqrt 2i\) have no common prime factor\footnote{Technically speaking, we should say they don't have any common irreducible factors. But we are in a UFD. So prime and irreducible are the same thing here.}. Now we want to argue that both \(y+\sqrt 2i\) and \(y-\sqrt 2i\) are perfect cubes.
+
+Since \(\ZZ \left[\sqrt 2 i\right] \) is a UFD, factorization into primes is unique (up to a factor of units). The only units of \(\ZZ \left[\sqrt 2 i\right] \) are \(1\) and \(-1\). Suppose \(p\) is a prime in \(\ZZ \left[\sqrt 2 i\right] \) dividing \(x\). Then \(p^3\) divides either of \(y+\sqrt 2i\) and \(y-\sqrt 2i\). Now, since their prime factorization is unique, we can conclude that both of them are perfect cubes. In fact,
+\[ y+\sqrt 2i = \left(a+b\sqrt 2i\right)^3 \text{ and } y - \sqrt 2i = \left(a - b\sqrt 2i\right)^3  \]
+for some \(a,b \in \ZZ\). Now, expanding these equations and solving for \(a\) and \(b\), one finds that the only possibilities are \(a = \pm 1\) and \(b=1\). From this, we can find that \(y = \pm 5\). So \(x = 3\). These are the only solutions.
+
+\vspace{5mm}
+
+\begin{exercise}
+Find all pairs of integers \(\left(x,y\right) \) such that \(x^2 = y^2 + 5\).
+\end{exercise}
+Let's try to do this the same way as above. After factorizing, we obtain
+\[ x^2 = \left(y + \sqrt 5i\right) \left(y - \sqrt 5i\right) \,. \]
+In a similar spirit, we shall now work on the ring \(\ZZ \left[  \sqrt 5i\right] \). One can show that \(\gcd \left( y + \sqrt 5i , y - \sqrt 5i \right) \) is \(1\) when \(y\) is not divisible by \(5\). The case \(5 \mid y\) is trivial, and can be solved by considering mod \(25\). Therefore, by a similar argument as above, both \(y + \sqrt 5i\) and \( y - \sqrt 5i\) are perfect squares in \(\ZZ \left[  \sqrt 5i\right] \).
+\[ y + \sqrt 5i = \pm \left(a + b \sqrt 5i\right)^2 =  \pm a^2 \mp 5b^2 \pm 2ab \sqrt 5i \,.  \]
+Therefore, \(1 = \pm 2ab\), so there are no solutions!
+
+But clearly that's not true at all. \(\left(x,y\right) = \left(\pm 3, \pm 2\right) \) is clearly a solution to this equation. So where did we go wrong? Here we implicitly assumed that \(\ZZ \left[  \sqrt 5i\right] \) is a UFD, and invoked unique factorization to argue that both \(y + \sqrt 5i\) and \( y - \sqrt 5i\) are perfect squares. But \(\ZZ \left[  \sqrt 5i\right] \) is NOT a UFD.
+For instance, \(9\) does not have a unique factorization in \(\ZZ \left[  \sqrt 5i\right] \).
+\[ 9 = 3 \cdot 3 = \left(2 + \sqrt 5i\right) \left(2- \sqrt 5i\right) \, , \]
+and \(3\), \(2 + \sqrt 5i\), \(2 - \sqrt 5i\) are all irreducibles. So there does not exist a unique factorization into irreducibles. That's why this proof is wrong.
+
+\section{Gaussian Integers}
+The reader is highly encouraged to show that the ring of Gaussian integers \(\ZZ \left[i\right] \) is an ED, and hence a UFD. Gaussian integers are particularly useful in solving various number theory problems.
+\begin{exercise}
+Let \(p\) be a prime. Then \(p = a^2+b^2\) if and only if \(p \equiv 1 \amod 4\).
+\end{exercise}
+\begin{soln}
+For \(p\equiv 3 \amod 4\), \(p\) cannot be expressed as the sum of two squares, because the sum of two squares is either \(0\) or \(1\) or \(2\) in mod \(4\). Now let's consider the converse. Since \(p \equiv 1 \amod 4\), \(-1\) is a quadratic residue. This can be seen by noting that
+\[ \left(\frac{-1}{p}\right) = \left(-1\right) ^{\frac{p-1}{2}} = 1 \,. \]
+So, there exists \(n \in \NN\) such that \(p \mid n^2 +1\). Now we shall work on \(\ZZ \left[i\right] \).
+\[ p \mid n^2 + 1 = \left(n+i\right) \left(n-i\right) \,. \]
+Now suppose \(p\) is a prime in \(\ZZ \left[i\right] \). Then \(p\) divides either of \(n \pm i\). So, \(n \pm i = p \left(a+bi\right) \) for some \(a,b \in \ZZ\). Equating the imaginary parts, we get that \(pb = \pm 1\). This is not possible since \(p\) is not a unit in \(\ZZ\). Therefore, \(p\) is not a prime in \(\ZZ \left[i\right] \). Hence,
+\[ p = \left(a+bi\right) \left(c+di\right) \,, \]
+where neither \(a+bi\) nor \(c+di\) is a unit. The only units in \(\ZZ \left[i\right] \) are \(\pm 1, \pm i\). By taking norm on both sides, we find that
+\[ p^2 = N \left(p\right) = N\left(a+bi\right) N\left(c+di\right) = \left(a^2+b^2\right) \left(c^2+d^2\right) \,. \]
+\(a^2+b^2\) cannot be \(1\), because then \(a+ib\) becomes a unit. For the same reason \(c^2+d^2\) cannot be \(1\). Therefore, we must have \(p = a^2+b^2=c^2+d^2\).
+\end{soln}
+We have seen that every prime of the form \(4k+1\) can be expressed as the sum of two squares. But is this expression unique? Can there be multiple ways of expressing a prime as a sum of two integers?
+\begin{exercise}
+If \(p = a^2 + b^2\), \(a\) and \(b\) are unique up to order and sign.
+\end{exercise}
+\begin{soln}
+Suppose \(p = a^2+b^2=c^2+d^2\). Factorizing in \(\ZZ \left[i\right] \), we get
+\[ \left(a+bi\right)\left(a-bi\right) = \left(c+di\right) \left(c-di\right) \,. \]
+\(N \left(c \pm di\right) = N \left(a\pm bi\right)  = p\) is a prime in \(\NN\), so \(a \pm bi\) and \(c \pm di \) are all primes in \(\ZZ \left[i\right] \). Because otherwise,
+\[ \alpha \beta = a \pm bi \implies N \left(\alpha\right) N \left(\beta\right) = N \left(a \pm bi\right) = p \implies N \left(\alpha\right) = 1 \text{ or } N \left(\beta \right) = 1 \,, \]
+which means \(\alpha\) or \(\beta\) is a unit. Since \(\ZZ \left[i\right] \) is a UFD,
+\[ a + bi = u \left(c+di\right) \ \text{ or } \ a+bi = u \left(c-di\right) \,, \]
+for some unit \(u \in \ZZ \left[i\right] \). Now, \(u \in \left\{1,-1,i, -i\right\} \), so considering these cases one can show that \(\left\{a^2, b^2\right\} = \left\{c^2,d^2\right\} \).
+\end{soln}
+\begin{exercise}[Pythagorian triples]
+Find all triples of integers \(\left(x,y,z\right) \) such that \(x^2 + y^2 = z^2\) and \(\gcd \left(x,y\right) = 1\).
+\end{exercise}
+It is possible to show using elementary methods that the general form of Pythagorian triples is \(\left(x,y,z\right) = \left(m^2-n^2, 2mn, m^2 +n^2\right) \), where \(m-n\) is odd. Here we shall see a solution involving Gaussian integers.
+\begin{soln}
+Note that, \(x\) and \(y\) must have different parity. If they both are even, \(\gcd \left(x,y\right) = 1\) is not satisfied. If both of them are odd, \(z\) is even. But then, taking mod \(4\) yields a contradiction. Therefore, we can assume WLOG that \(x\) is odd and \(y\) is even. Then \(z\) is odd. Factorizing in \(\ZZ \left[i\right] \), we get
+\[ z^2 = x^2+y^2 = \left(x+iy\right) \left(x-iy\right) \,. \]
+Now we claim that \(\gcd \left(x+iy, x-iy\right) = 1\) in \(\ZZ \left[i\right] \). Let \(d\) be a Gaussian integer that divides both \(x+iy\) and \(x-iy\). Then we get \(d \mid 2x\) and \(d \mid 2yi\). \(d \mid 2\) contradicts with \(z\) being odd. Therefore, \(d \mid x\) and \(d \mid y\). Taking norms, we get
+\[ N \left(d\right) \mid x^2 \text{ and } N \left(d\right) \mid y^2 \,. \]
+Since \(\gcd \left(x,y\right) \) in \(\ZZ\), \(N \left(d\right) \) must be \(1\), which indicates that \(d\) is a unit. Hence, \(\gcd \left(x+iy, x-iy\right) = 1\).
+
+Now, since \(\ZZ \left[i\right] \) is a UFD, both \(x+iy\) and \(x-iy\) are perfect squares (up to a factor of some unit) in \(\ZZ \left[i\right] \). Therefore,
+\[ x+iy = u \left(a+ib\right) ^2 = u \left( a^2 - b^2 + 2xyi\right) \, ,   \]
+for some unit \(u\). Since we assumed \(y\) is even, \(u\) is either \(1\) or \(-1\). Therefore, we find that
+\[ \left(x,y,z\right) = \left(a^2 - b^2, 2ab, a^2 + b^2\right) \,, \]
+for \(a,b,c \in \ZZ\) with \(a\) and \(b\) having different parity. Because otherwise, \(\gcd \left(x,y\right)  = 1 \) condition is violated.
+\end{soln}
+Like \(\ZZ\), \(\ZZ \left[i\right] \) also has primes. What do these primes look like? One can easily check that not every primes in \(\ZZ\) stays prime in \(\ZZ \left[i\right] \). For instance, \(5\) is not a prime in \(\ZZ \left[i\right] \), because
+\[ 5 = \left(1+2i\right) \left(1-2i\right) \,. \]
+But what about these factors \(1+2i\) and \(1-2i\)? Are they primes? One can show that they are, indeed, primes in \(\ZZ \left[i\right] \). Because if \(\alpha\) divides \(1+2i\), by taking norm, we get
+\[ N \left(\alpha\right) \mid N \left(1+2i\right) = 5 \,. \]
+This indicates that \(1+2i\) does not have any nontrivial factors. This way one can show that the prime numbers of \(\ZZ\) of the form \(4k+1\) are not primes in \(\ZZ \left[i\right] \), but their factors are.
+
+Now what about primes of the form \(4k+3\)? They cannot be expressed as sum of two squares. So they aren't reducible in \(\ZZ \left[i\right] \), right? The details are left as an exercise for the reader to fill in.
+
+\begin{theorem}\label{thm:primes_in_gaussian}
+Every prime in \(\ZZ \left[i\right] \) is a unit multiple of one of the following:
+\begin{enumerate}[(i)]
+\item \(1+i\)
+\item \(p\), where \(p \equiv 3 \amod 4\) is a prime in \(\ZZ\)
+\item \(a+bi\), where \(a^2+b^2 = p\) for some prime \(p \in \ZZ\)
+\end{enumerate}
+\end{theorem}
+
+\begin{exercise}
+An integer greater than \(1\) is a sum of two squares if and only if any prime factor \(p\) with \(p \equiv 3 \amod 4\) occurs with even multiplicity.
+\end{exercise}
+\begin{soln}
+The if direction is easy, so we leave it as an exercise for the reader. We shall do the only if direction. Suppose \(n \ge 2\) is an integer such that \(n=a^2+b^2\). We shall proceed by strong induction on \(n\). The base case \(n=2\) is true, because it has no prime factor of the form \(4k+3\). Now assume \(n \ge 3\), and the statement is true for every \(m\) smaller than \(n\).
+
+If \(n\) has no prime factors of the form \(4k+3\), then the statement is vacously true. Suppose \(p \mid n = a^2+b^2\) where \(p\equiv 3 \amod 4\).
+\[ p \mid n = a^2+b^2 = \left(a+ib\right) \left(a-ib\right) \,. \]
+\(p\) is a prime in \(\ZZ \left[i\right] \) by \hyperref[thm:primes_in_gaussian]{Theorem~\ref*{thm:primes_in_gaussian}}. Therefore, \(p\) divides either of \(a \pm ib\). As a result, \(a \pm ib = p \left(c\pm id\right) \), so \(p\) divides
+both \(a\) and \(b\). Hence, \(a=pa'\) and \(b=pb'\) for some integers \(a,b\).
+\[ n= a^2+b^2 = p^2 \left(a'^2 + b'^2\right) \,. \]
+\(a'^2 + b'^2\) is a sum of two sqaures and it is smaller than \(n\). Therefore, by inductive hypothesis, every prime of the form \(4k+3\) has even multiplicity in \(a'^2 + b'^2\). Since \(n\) and \(a'^2 + b'^2\) differs only by a factor of \(p^2\), we can conclude that the statement is true for \(n\) as well.
+\end{soln}
+
+\section{Polynomials}
+We have seen earlier that the set of all polynomials with coefficients in a ring \(R\) forms a ring, and we denote this ring by \(R [x]\). If \(R\) is an integral domain, then so is \(R[x]\).
+\begin{proposition}
+If \(F\) is a field, \(F[x]\) is an Euclidean Domain.
+\end{proposition}
+\begin{proof}
+The Euclidean function in \(F[x]\) is \(N \left(f\right) = \deg f\).
+\end{proof}
+Now we shall see some interesting properties of polynomial rings, for which we need some more definitions.
+\begin{defn}[Ideal]
+A subset \(I \subseteq R\) is an \textbf{ideal}, written \(I \unlhd R\), if
+\begin{enumerate}[(i)]
+\item It is an additive subgroup of \(R\), i.e. it is closed under addition and
+additive inverses.
+\item If \(x \in I\) and \(r \in R\), then \(rx \in I\).
+\end{enumerate}
+An ideal \(I\) is called \textbf{principal} if it is generated by a single element. That is, there exists \(a \in R\) such that
+\[ I = \left\{ra \ | \ r \in R\right\} \,. \]
+We write it as \(I = (a)\).
+\end{defn}
+\begin{defn}[Principal Ideal Domain]
+An integral domain \(R\) is a \textbf{Principal Ideal Domain} (PID) if every ideal is a principal ideal.
+\end{defn}
+\begin{proposition}
+\(R\) is an ED \(\implies\) \(R\) is a PID \(\implies\) \(R\) is a UFD.
+\end{proposition}
+\begin{proposition}
+\(F[x]\) is a PID if and only if \(F\) is a field.
+\end{proposition}
+\begin{theorem}[Bézout's Identity]
+Let \(R\) be a PID, and \(a , b \in R\) with \(\gcd \left(a,b\right) = d\). Then there exist \(x,y \in R\) such that \(ax+by = d\).
+\end{theorem}
+In general, Bézout's identity does not hold when \(R\) is not a PID. In particular, if \(R\) is not a field, Bézout's identity is not true in \(R[x]\). For instance, let \(2x , x^2 \in \ZZ \left[x\right] \). Their gcd is \(x\). But there do not exist integer polynomials \(f,g \in \ZZ \left[x\right] \) such that
+\[ 2xf + x^2 g = x \,. \]
+\begin{exercise}[USA TST 2016]\label{ex:usa_tst_16}
+% Let $p$ be a prime number. Let $\mathbb F_p$ denote the integers modulo $p$, and let $\mathbb F_p[x]$ be the set of polynomials with coefficients in $\mathbb F_p$.
+Define $\Psi : \mathbb F_p[x] \to \mathbb F_p[x]$ by\[ \Psi\left( \sum_{i=0}^n a_i x^i \right) = \sum_{i=0}^n a_i x^{p^i}. \]
+Prove that for nonzero polynomials $F,G \in \mathbb F_p[x]$,
+\(\Psi \left(\gcd(F,G)\right)  = \gcd \left(\Psi(F), \Psi(G)\right) \).
+\end{exercise}
+In case you're not familiar with the notation, \(\mathbb F_p\) denotes the field of integers modulo \(p\), where \(p\) is a prime number.
+
+\begin{soln}[Solution Outline]
+First, show that \(\Psi\) is additive. Furthermore, if \(P \mid Q\), then \(\Psi \left(P\right) \mid \Psi \left(Q\right) \) for \(P,Q \in \mathbb F_p \left[x\right] \). Let \(D = \gcd \left(F,G\right) \), and \(D' = \gcd \left( \Psi \left(F\right) , \Psi \left(G\right) \right)\).
+We need to show that \(\Psi \left(D\right) = D' \).
+
+\(D\) divides both \(F\) and \(G\), so \(\Psi \left(D\right) \) divides both \(\Psi \left(F\right) \) and \(\Psi \left(G\right) \). Therefore,
+\[ \Psi \left(D\right) \mid \gcd \left( \Psi \left(F\right) , \Psi \left(G\right) \right) = D' \,. \]
+Since \(\mathbb F_p\) is a field, \(\mathbb F_p [x]\) is a PID. Therefore, Bézout's identity holds here. So, there exists \(A,B \in \mathbb F_p \left[x\right] \) such that
+\[ AF+BG = \gcd \left(F,G\right)  = D \implies \Psi \left(AF\right) + \Psi \left(BG\right)  = \Psi \left(D\right)  \,. \]
+Now, \(D' \mid \Psi \left(F\right) \mid \Psi \left(AF\right) \). Similarly, \(D' \mid \Psi \left(BG\right) \). Therefore, \(D' \mid \Psi \left(D\right) \). Hence, \(D' = \Psi \left(D\right) \).
+\end{soln}
+\begin{exercise}[IMC 2020]
+Find all prime numbers $p$ such that there exists a unique $a \in \mathbb{F}_p$ for which $a^3 - 3a + 1 = 0$.
+\end{exercise}
+\begin{soln}
+We need to find all \(p\) such that the polynomial \(x^3 - 3x +1 \in \FF_p \left[x\right] \) has a unique root \(a\). In other words, either \(x^3 - 3x +1 = \left(x-a\right) ^3\) or \(x^3 - 3x +1 = \left(x-a\right) P \left(x\right) \) for some irreducible quadratic polynomial \(P \in \FF_p \left[x\right] \). For the first case, \(3a = 0\) with \(a \ne 0\), so \(p = 3\). Let's consider the latter case now.
+\[ x^3 - 3x +1 = \left(x-a\right) \left(x^2 + \alpha x + \beta \right) \implies \alpha=a, \beta =-a ^{-1}  \,. \]
+The quadratic \(x^2 + ax - a ^{-1} \) is irreducible. Hence, its discriminant \(\Delta\) is not a square of any number in \(\FF_p\). In other words, \(\Delta = a^2 + 4 a ^{-1} \) is not a quadratic residue modulo \(p\).
+\[ a^3 - 3a  + 1 = 0 \implies a \left(a^2 -3\right) = -1 \implies a^2 = 3 - a ^{-1} \implies \Delta = 3 \left(1+ a ^{-1} \right) \,. \]
+Now, let \(b = 1+ a ^{-1} \). Substituting this into our original equation \(a^3 - 3a  + 1 = 0\), we get
+\[ \left(b-1\right) ^3-3 \left(b-1\right) ^2 + 1 = 0 \implies b \left(b-3\right) ^2 = 3 \implies \Delta 3b = b^2 \left(b-3\right) ^2 \,.\]
+So \(\Delta\) is a quadratic residue modulo \(p\), and hence \(x^2 + ax - a ^{-1} \) is reducible. Therefore, no such \(p\) in this case.
+\end{soln}
+
+\section{A ``Proof'' of Fermat's Last Theorem}
+\begin{theorem}[Fermat's Last Theorem]
+The equation \[x^n+y^n=z^n\] has no solution in positive integers if \(n \ge 3\).
+\end{theorem}
+We shall first consider the case \(n=3\) and then we will generalize. Firstly, we can assume WLOG that \(x,y,z\) have no common factors. Also, one can show that \(3 \nmid y\) and \(3 \nmid z\). Let \(\omega\) be the primitive cubic root of unity, i.e. \(\omega = e^{\frac{2\pi i}{3}}\). Then we have
+\[ x^3 - 1 = \left(x-1\right) \left(x-\omega\right) \left(x-\omega^2\right) \implies x^3 + 1 = \left(x+1\right) \left(x+\omega\right) \left(x+\omega^2\right) \,. \]
+Using this, we can factorize \(x^3 + y^3\).
+\[ z^3 = x^3+y^3=  \left(x+y\right) \left(x+y\omega\right) \left(x+y\omega^2\right) \,. \]
+Now we want to show that these three factors are pairwise co-prime, i.e. pairwise gcd \(1\). Suppose \(p\) is a prime in \(\ZZ \left[\omega\right] \) such that \(p \mid x+y\) and \(p \mid x+y\omega\). Then \(p\) must divide \(\left(\omega-1\right) y\) and \(\left(\omega-1\right) x\). Since \(x\) and \(y\) do not have any common divisor, \(p\) must divide \(\omega -1\). But \(\omega - 1\) divides \(3\), because
+\[ \left(\omega - 1\right) ^2 + 3 \left(\omega - 1\right) = -3 \implies \left(\omega - 1\right) \left(\omega +2\right) = -3 \,. \]
+So \(p\) divides \(3\). But \(z\) is coprime with \(3\), so \(p\) must be \(1\). Hence, \(\gcd \left(x+y, x+y \omega\right) = 1 \). In a similar manner, one can show that the other factors are also pairwise coprime.
+
+Now, the product of some pairwise coprime numbers is a perfect cube, so the factors must also be a perfect cube.
+\[ x+y\omega = u a^3 \ \text{ and } \ x+y\omega^2 = \bar u \bar a ^3 \,. \]
+for some unit \(u\). Firstly, consider \(u = 1\). Let \(a = m+n \omega\), so \(\bar a = m+n \omega^2 \). After expanding and subtracting one from the other, we get
+\[ y \left(\omega - \omega^2\right) = 3 \left(m^2n-mn^2\right)  \left(\omega - \omega^2\right) \implies y =  3 \left(m^2n-mn^2\right)  \,.\]
+But \(3 \nmid y\), so this yields a contradiction. Similarly, for \(u = \omega\) and \(u = \omega^2\), one obtains an analogous contradiction. Therefore, \(x^3+y^3=z^3\) has no solutions in \(\ZZ^+\).
+
+Gabriel Lamé showed that it suffices to consider the case when \(n\) is a prime number. He generalized this very idea we used in order to solve the case \(n=3\). Suppose \(n=p\) is a prime number, and let \(\omega\) be the primitive \(p\)-th root of unity, i.e. \(\omega = e^{\frac{2\pi i}{p}}\). Using this, we can factorize \(x^p + y^p\).
+\[ z^ p = x^p + y^p = \left(x+y\right) \left(x+y \omega\right) \left(x+y \omega ^2\right) \cdots \left(x+y \omega^{p-1}\right) \,. \]
+As before, you can show that \(p \nmid y\) and \(p \nmid z\). Also, these factors are relatively coprime which can be shown in a similar manner as above. Therefore, these factors are all perfect \(p\)-th power. Therefore,
+\[ x+y \omega = u a^p \ \text{ and } \  x+y \omega^{p-1} =\bar u \bar a ^p \,, \]
+for some unit \(u\). Suppose \(u = 1\). Subtracting one from the other, we get
+\[ y \left(\omega - \omega^{p-1}\right) = a^p - \bar a ^p \,. \]
+The RHS is divisible by \(p\). This can be shown by expanding. However, \(p\) is coprime with \(\omega - \omega^{p-1}\). Therefore, \(p \mid y\). But this is a contradiction. Similarly, considering \(u = \omega^i\), one obtains an analogous contradiction. So \(x^p + y^p = z^p\) has no solutions in \(\ZZ^+\).
+
+\vspace{3mm}
+
+Other than the omitted details, this proof seems fine, right? But actually it's not. There is a hidden assumption that \(\ZZ \left[\omega\right] \) is a UFD. But that's not true for every \(p\). In fact, it holds only for finitely many \(p\). While these algebraic tools are really useful in order to solve various number theory problems, we need to be extremely careful about each of our claims and reasonings behind steps.
+
+
+\section{Practice Problems}
+\begin{problem}
+Show that \(\ZZ \left[\sqrt 2 i\right] \) is an ED with the norm function \( N \left(x+ y \sqrt 2i\right) = x^2 + 2y^2\).
+\end{problem}
+\begin{problem}
+Show that \(\gcd \left( y + \sqrt 5i , y - \sqrt 5i \right) =1\) for \(5 \nmid y\).
+\end{problem}
+\begin{problem}
+Show that \(\ZZ \left[ i\right] \) is an ED with the norm function \( N \left(x+ y i\right) = x^2 + y^2\).
+\end{problem}
+\begin{problem}
+Find all pairs of integers \(\left(x,y\right) \) such that \(x^3 = y^2 +4\).%\footnote{Gaussian integers!!}
+\end{problem}
+\begin{problem}
+Find all triples of integers \(\left(x,y,z\right) \) such that \(x^2 + y^2 = z^n\) and \(\gcd \left(x,y\right) =1\).
+\end{problem}
+\begin{problem}
+Find all pairs of integers \(\left(x,y\right) \) such that \(x^2 + 1 = y^n\) for some integer \(n > 1\).
+\end{problem}
+\begin{problem}
+Prove \hyperref[thm:primes_in_gaussian]{Theorem~\ref*{thm:primes_in_gaussian}}.
+\end{problem}
+\begin{problem}
+Fill in the details of \hyperref[ex:usa_tst_16]{Exercise~\ref*{ex:usa_tst_16}}.
+\end{problem}
+\begin{problem}
+Prove that \(\ZZ \left[\omega\right] \) is an ED, where \(\omega\) is the primitive cubic root of unity.
+\end{problem}
+\begin{problem}
+Find all pair of integers \(\left(x,y\right) \) such that
+\[ x^2-x+1 = y^3 \,. \]
+\end{problem}
+\begin{problem}
+Find all pair of integers \(\left(x,y\right) \) such that
+\[ x^2+x+2 = y^3 \,. \]
+\end{problem}
+\begin{problem}
+If \(x,y,z\) are positive integers satisfying \(x^3 + y^3 = z^3\), show that \(3 \nmid y\) and \(3 \nmid z\).
+\end{problem}
+\begin{problem}
+Solve the \(n=3\) case of Fermat's last theorem by working on \(\ZZ \left[\sqrt 3i\right] \).
+\end{problem}
+\begin{problem}
+Find all pairs \((x, y)\) of positive integers such that
+\[
+13^{x}+3=y^{2} \,.
+\]
+\end{problem}
+\begin{problem}
+Solve the equation
+\[
+x^{2}+3=y^{n} \, ,
+\]
+where \(n\) is an integer greater than \(1\).
+\end{problem}
+\begin{problem}
+Solve the equation
+\[
+x^{2}+9=y^{n} \, ,
+\]
+where \(n\) is an integer greater than \(1\).
+\end{problem}
+\begin{problem}
+Solve the equation
+\[
+x^{2}+11=3^{n} \, ,
+\]
+where \(n\) is an integer greater than \(1\).
+\end{problem}
+\begin{problem}
+Let \(a\) and \(b\) be positive integers such that \(b=x^{2}-d y^{2}\) for some integers \(x, y, d\) with \(d=a^{2}-1\). Prove that if \(b<2(a+1)\), then \(b\) is a perfect square.
+\end{problem}
+\end{document}
